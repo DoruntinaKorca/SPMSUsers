@@ -15,8 +15,6 @@ namespace API.Controllers
     public class UsersController : BaseApiController
     {
 
-
-
         [HttpGet]
         public async Task<ActionResult<List<PersonalProfileDto>>> GetAllUsers()
         {

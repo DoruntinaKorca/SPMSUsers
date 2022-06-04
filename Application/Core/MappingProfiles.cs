@@ -33,11 +33,28 @@ namespace Application.Core
                                 src.Address.City.Country.CountryName));
 
 
-            /*
-                .ForPath(dest => dest.City,
-                            opts => opts.MapFrom(src =>
-                                src.Address.City.CityName))
-             */
+            CreateMap<Student, StudentDto>()
+                .ForPath(dest => dest.Generation,
+                opts => opts.MapFrom(src => src.Generation.Name))
+                .ForPath(dest =>dest.Name,
+                opts=>opts.MapFrom(src => src.User.Name))
+                .ForPath(dest => dest.Surname,
+                opts => opts.MapFrom(src => src.User.Surname));
+
+
+            CreateMap<AcademicStaff, AcademicStaffDto>()
+                .ForPath(dest=>dest.AcademicLevel,
+                opts=>opts.MapFrom(src=>src.AcademicLevel.Name))
+                .ForPath(dest => dest.Name,
+                opts => opts.MapFrom(src => src.User.Name))
+                .ForPath(dest => dest.Surname,
+                opts => opts.MapFrom(src => src.User.Surname));
+
+            CreateMap<AdministrativeStaff, AdministrativeStaffDto>()
+                .ForPath(dest => dest.Name,
+                opts => opts.MapFrom(src => src.User.Name))
+                .ForPath(dest => dest.Surname,
+                opts => opts.MapFrom(src => src.User.Surname));
 
         }
     }

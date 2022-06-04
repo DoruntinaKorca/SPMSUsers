@@ -33,26 +33,11 @@ namespace Application.Queries.Users
             public async Task<List<PersonalProfileDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var users=await _context.Users
-                    .Include(u=> u.Address)
-                    .Include(u => u.Address.City)
-                    .Include(u => u.Address.City.CityCategory)
+                    .Include(u => u.Address)
+                    .ThenInclude(u => u.City)
+                    .ThenInclude(u => u.CityCategory)
                     .Include(u => u.Address.City.Country)
-                    /*
-                    .Select(u => new User
-                    {
-                        Id = u.Id,
-                        UserName = u.UserName,
-                        Name = u.Name,
-                        ParentName = u.ParentName,
-                        Surname = u.Surname,
-                        DateOfBirth=u.DateOfBirth,
-                        AddressId = u.AddressId,
-                        ProfilePictureURL=u.ProfilePictureURL,
-                        Gender= u.Gender,
-                        PersonalNumber=u.PersonalNumber,
-                        DateRegistered=u.DateRegistered,
-                        Address = u.Address
-                    })*/.ToListAsync();
+                    .ToListAsync();
 
                 var result =_mapper.Map<List<PersonalProfileDto>>(users);
 

@@ -20,6 +20,9 @@
 
   <ItemGroup>
     <Folder Include="Commands\" />
+    <Folder Include="Queries\Countries\" />
+    <Folder Include="Queries\Generations\" />
+    <Folder Include="Queries\AcademicLevel\" />
   </ItemGroup>
 
   <PropertyGroup>

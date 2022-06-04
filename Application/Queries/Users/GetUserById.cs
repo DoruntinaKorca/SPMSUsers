@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using AutoMapper;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -31,16 +32,17 @@ namespace Application.Queries.Users
 
             public async Task<PersonalProfileDto> Handle(Query request, CancellationToken cancellationToken)
             {
-               var user = await _context.Users
+                var user = await _context.Users
                     .Include(u => u.Address)
-                    .Include(u => u.Address.City)
-                    .Include(u => u.Address.City.CityCategory)
+                    .ThenInclude(u => u.City)
+                    .ThenInclude(u => u.CityCategory)
                     .Include(u => u.Address.City.Country)
                     .FirstOrDefaultAsync(x => x.Id == request.UserId);
+             
 
                 var result = _mapper.Map<PersonalProfileDto>(user);
-
                 return result;
+
             }
         }
     }

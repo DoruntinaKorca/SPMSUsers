@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +16,7 @@ namespace API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             //when we start our app, we're gonna check if we
             //have a database and if we do not, we're gonna create one
@@ -35,7 +37,9 @@ namespace API
             try
             {
                 var context = services.GetRequiredService<UsersContext>();
-                context.Database.Migrate();
+                var userManager = services.GetRequiredService<UserManager<User>>();
+                await context.Database.MigrateAsync();
+                await Seed.SeedData(context,userManager);
             }
             catch (Exception ex)
             {
@@ -43,7 +47,7 @@ namespace API
                 logger.LogError(ex, "An error occured during Migration !! ");
             }
 
-            host.Run();
+            await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

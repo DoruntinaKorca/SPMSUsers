@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Queries.AcademicStaff;
+using Application.Queries.AdministrativeStaff;
+using Application.Queries.Cities;
+using Application.Queries.Students;
 using Application.Queries.Users;
 using Domain;
 using MediatR;
@@ -51,7 +55,12 @@ namespace API
                 .AddRoleManager<RoleManager<IdentityRole<Guid>>>();
 
             services.AddMediatR(typeof(GetAllUsers.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllCities.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllStudents.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllAdministrativeStaff.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllAcademicStaff.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
             services.AddAuthentication();
             services.AddSwaggerGen(c =>
             {
