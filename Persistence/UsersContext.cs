@@ -33,11 +33,13 @@ namespace Persistence
         public DbSet<Generation> Generations { get; set; }
 
     //    public DbSet<Role> Roless { get; set; }
-        public DbSet<Street> Streets { get; set; }
+        //public DbSet<Street> Streets { get; set; }
 
         public DbSet<Student> Students { get; set; }
 
-   //     public DbSet<UsersRoles> UsersRoles { get; set; }
+        public DbSet<UsersFaculty> UsersFaculties { get; set; }
+
+        //     public DbSet<UsersRoles> UsersRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -86,9 +88,9 @@ namespace Persistence
 
             //user 
             builder.Entity<User>()
-               .HasOne(s => s.Address)
+               .HasOne(s => s.AddressDetails)
                .WithMany(u => u.Users)
-               .HasForeignKey(fk => fk.AddressId)
+               .HasForeignKey(fk => fk.AddressDetailsId)
                .OnDelete(DeleteBehavior.Cascade);
 
     
@@ -134,14 +136,21 @@ namespace Persistence
 
 
             //street
+            /*
             builder.Entity<Street>()
                 .HasOne(c => c.City)
                 .WithMany(s => s.Streets)
                 .HasForeignKey(fk => fk.CityId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade); */
 
+            //UsersFaculty
+            builder.Entity<UsersFaculty>(x => x.HasKey(u => new { u.UserID,u.FacultyID }));
 
-            
+            builder.Entity<UsersFaculty>()
+                .HasOne(u=>u.User)
+                .WithMany(uf=>uf.UsersFaculties)
+                .HasForeignKey(fk => fk.UserID);
+
         }
     }
 }

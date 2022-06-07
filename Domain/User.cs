@@ -11,8 +11,6 @@ namespace Domain
     public class User : IdentityUser<Guid>
     {
 
-
-   
         [Required]
         public String Name { get; set; }
 
@@ -26,7 +24,7 @@ namespace Domain
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        public int? AddressId { get; set; }
+        public int AddressDetailsId { get; set; }
 
         public String ProfilePictureURL { get; set; }
         [Required]
@@ -44,7 +42,9 @@ namespace Domain
 
         public virtual AdministrativeStaff AdministrativeStaff { get; set; }
 
-        public virtual Street Address { get; set; }
+        public virtual City AddressDetails { get; set; }
+
+        public ICollection<UsersFaculty> UsersFaculties { get; set; } = new List<UsersFaculty>();
 
 
     }

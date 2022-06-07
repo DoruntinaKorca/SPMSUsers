@@ -26,5 +26,12 @@ namespace API.Controllers
         {
             return await Mediator.Send(new GetUserById.Query { UserId = id });
         }
+
+
+        [HttpGet("GetUserFaculty/{facultyId}")]
+        public async Task<ActionResult<UsersFaculty>> GetUserFaculty(int facultyId)
+        {
+            return await Mediator.Send(new GetUserFaculty.Query { FacultyId = facultyId });
+        }
     }
 }

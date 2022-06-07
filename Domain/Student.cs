@@ -20,6 +20,8 @@ namespace Domain
 
 
         public int SpecializationId { get; set; }
-     
+
+        public int FileNumber { get; set; }
+
     }
 }

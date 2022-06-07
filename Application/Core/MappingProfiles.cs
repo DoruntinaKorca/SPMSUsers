@@ -19,18 +19,15 @@ namespace Application.Core
 
             
             CreateMap<User, PersonalProfileDto>()
-                .ForPath(dest => dest.Street,
-                  opts => opts.MapFrom(src =>
-                      src.Address.StreetName))
                 .ForPath(dest => dest.City,
                             opts => opts.MapFrom(src =>
-                                src.Address.City.CityName))
+                                src.AddressDetails.CityName))
                 .ForPath(dest => dest.CityCategory,
                             opts => opts.MapFrom(src =>
-                                src.Address.City.CityCategory.CategoryName))
+                                src.AddressDetails.CityCategory.CategoryName))
                 .ForPath(dest => dest.Country,
                             opts => opts.MapFrom(src =>
-                                src.Address.City.Country.CountryName));
+                                src.AddressDetails.Country.CountryName));
 
 
             CreateMap<Student, StudentDto>()

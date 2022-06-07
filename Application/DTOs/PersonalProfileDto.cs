@@ -23,13 +23,13 @@ namespace Application.DTOs
         
         public DateTime DateOfBirth { get; set; }
 
-        public int AddressId { get; set; }
+        public int AddressDetailsId { get; set; }
 
         public String ProfilePictureURL { get; set; }
         
         public String Gender { get; set; }
 
-        public  String Street { get; set; }
+      //  public  String Street { get; set; }
        public String City { get; set; }
         public String CityCategory { get; set; }
        public String Country { get; set; }

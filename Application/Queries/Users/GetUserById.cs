@@ -33,10 +33,9 @@ namespace Application.Queries.Users
             public async Task<PersonalProfileDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
-                    .Include(u => u.Address)
-                    .ThenInclude(u => u.City)
+                     .Include(u => u.AddressDetails)
                     .ThenInclude(u => u.CityCategory)
-                    .Include(u => u.Address.City.Country)
+                    .Include(u => u.AddressDetails.Country)
                     .FirstOrDefaultAsync(x => x.Id == request.UserId);
              
 

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(UsersContext))]
-    partial class UsersContextModelSnapshot : ModelSnapshot
+    [Migration("20220606110658_UsersFacultiesEntityAdded")]
+    partial class UsersFacultiesEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,6 +128,32 @@ namespace Persistence.Migrations
                     b.ToTable("Generations");
                 });
 
+            modelBuilder.Entity("Domain.Street", b =>
+                {
+                    b.Property<int>("StreetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StreetName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StreetNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("StreetId");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("StreetName")
+                        .IsUnique();
+
+                    b.ToTable("Streets");
+                });
+
             modelBuilder.Entity("Domain.Student", b =>
                 {
                     b.Property<Guid>("StudentId")
@@ -159,7 +187,7 @@ namespace Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AddressDetailsId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -236,7 +264,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressDetailsId");
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -436,6 +464,17 @@ namespace Persistence.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("Domain.Street", b =>
+                {
+                    b.HasOne("Domain.City", "City")
+                        .WithMany("Streets")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("Domain.Student", b =>
                 {
                     b.HasOne("Domain.Generation", "Generation")
@@ -457,13 +496,12 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.HasOne("Domain.City", "AddressDetails")
+                    b.HasOne("Domain.Street", "Address")
                         .WithMany("Users")
-                        .HasForeignKey("AddressDetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("AddressDetails");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("Domain.UsersFaculty", b =>
@@ -535,7 +573,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.City", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("Streets");
                 });
 
             modelBuilder.Entity("Domain.CityCategory", b =>
@@ -551,6 +589,11 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Generation", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("Domain.Street", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

@@ -23,12 +23,12 @@ namespace Persistence
                         ParentName = "Jane Doe",
                         Surname = "Korca",
                         DateOfBirth = DateTime.Parse("1998-11-11"),
-                        AddressId = 1,
+                        AddressDetailsId = 1,
                         ProfilePictureURL = null,
                         Gender = "Female",
                         PersonalNumber = 12345678,
                         DateRegistered = DateTime.Parse("2019-09-09"),
-                        Address = null
+                        AddressDetails = null
                     },
                      new User{
                         UserName="EndritM",
@@ -37,12 +37,12 @@ namespace Persistence
                         ParentName = "John Doe",
                         Surname = "Makolli",
                         DateOfBirth = DateTime.Parse("2001-02-02"),
-                        AddressId = 2,
+                        AddressDetailsId = 2,
                         ProfilePictureURL = null,
                         Gender = "Male",
                         PersonalNumber = 12345648,
                         DateRegistered = DateTime.Parse("2019-10-09"),
-                        Address = null
+                        AddressDetails = null
                     },
                       new User{
                         UserName="RilindB",
@@ -51,12 +51,12 @@ namespace Persistence
                         ParentName = "John Doe",
                         Surname = "Bicaj",
                         DateOfBirth = DateTime.Parse("2001-12-12"),
-                        AddressId = 3,
+                        AddressDetailsId = 3,
                         ProfilePictureURL = null,
                         Gender = "Male",
                         PersonalNumber = 34920392,
                         DateRegistered = DateTime.Parse("2019-09-09"),
-                        Address = null
+                        AddressDetails = null
                     },
                        new User{
                         UserName="MedinaSh",
@@ -65,12 +65,12 @@ namespace Persistence
                         ParentName = "John Doe",
                         Surname = "Shamolli",
                         DateOfBirth = DateTime.Parse("1994-11-11"),
-                        AddressId = 1,
+                        AddressDetailsId = 1,
                         ProfilePictureURL = null,
                         Gender = "Female",
                         PersonalNumber = 10293322,
                         DateRegistered = DateTime.Parse("2014-09-09"),
-                        Address = null
+                        AddressDetails = null
                     },
                         new User{
                         UserName="RamizH",
@@ -79,12 +79,12 @@ namespace Persistence
                         ParentName = "John Doe",
                         Surname = "Hoxha",
                         DateOfBirth = DateTime.Parse("1975-09-09"),
-                        AddressId = 2,
+                        AddressDetailsId = 2,
                         ProfilePictureURL = null,
                         Gender = "Male",
                         PersonalNumber = 29345534,
                         DateRegistered = DateTime.Parse("2002-09-09"),
-                        Address = null
+                        AddressDetails = null
                     },
                          new User{
                         UserName="Skender",
@@ -93,12 +93,12 @@ namespace Persistence
                         ParentName = "John Doe",
                         Surname = "Doe",
                         DateOfBirth = DateTime.Parse("1988-02-11"),
-                        AddressId = 3,
+                        AddressDetailsId = 3,
                         ProfilePictureURL = null,
                         Gender = "Male",
                         PersonalNumber = 39443443,
                         DateRegistered = DateTime.Parse("2012-09-09"),
-                        Address = null
+                        AddressDetails = null
                     },
                           new User{
                         UserName="ArberK",
@@ -107,12 +107,12 @@ namespace Persistence
                         ParentName = "John Doe",
                         Surname = "Kadriu",
                         DateOfBirth = DateTime.Parse("1997-03-11"),
-                        AddressId = 1,
+                        AddressDetailsId = 1,
                         ProfilePictureURL = null,
                         Gender = "Male",
                         PersonalNumber = 93443232,
                         DateRegistered = DateTime.Parse("2016-09-09"),
-                        Address = null
+                        AddressDetails = null
                     }
                 };
                 foreach (var user in users)
