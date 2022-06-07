@@ -12,7 +12,7 @@ namespace Domain
     {
 
         [Required]
-        public String Name { get; set; }
+        public String FirstName { get; set; }
 
 
         [Required]
@@ -24,7 +24,9 @@ namespace Domain
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        public int AddressDetailsId { get; set; }
+        public String AddressDetails { get; set; }
+
+        public int CityId { get; set; }
 
         public String ProfilePictureURL { get; set; }
         [Required]
@@ -42,7 +44,7 @@ namespace Domain
 
         public virtual AdministrativeStaff AdministrativeStaff { get; set; }
 
-        public virtual City AddressDetails { get; set; }
+        public virtual City City { get; set; }
 
         public ICollection<UsersFaculty> UsersFaculties { get; set; } = new List<UsersFaculty>();
 

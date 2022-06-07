@@ -11,7 +11,7 @@ namespace Application.DTOs
         public Guid AcademicStaffId { get; set; }
 
         // public virtual User User { get; set; }
-        public String Name { get; set; }
+        public String FirstName { get; set; }
         public String Surname { get; set; }
 
         public int AcademicLevelId { get; set; }

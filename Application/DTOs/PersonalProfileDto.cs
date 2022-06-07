@@ -11,7 +11,7 @@ namespace Application.DTOs
     {
         public Guid Id { get; set; }
 
-        public String Name { get; set; }
+        public String FirstName { get; set; }
 
 
  
@@ -23,7 +23,8 @@ namespace Application.DTOs
         
         public DateTime DateOfBirth { get; set; }
 
-        public int AddressDetailsId { get; set; }
+        public String AddressDetails { get; set; }
+
 
         public String ProfilePictureURL { get; set; }
         

@@ -88,9 +88,9 @@ namespace Persistence
 
             //user 
             builder.Entity<User>()
-               .HasOne(s => s.AddressDetails)
+               .HasOne(s => s.City)
                .WithMany(u => u.Users)
-               .HasForeignKey(fk => fk.AddressDetailsId)
+               .HasForeignKey(fk => fk.CityId)
                .OnDelete(DeleteBehavior.Cascade);
 
     

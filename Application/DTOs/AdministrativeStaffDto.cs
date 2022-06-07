@@ -12,7 +12,7 @@ namespace Application.DTOs
         public Guid AdministrativeStaffId { get; set; }
       //  public virtual User User { get; set; }
 
-        public String Name { get; set; }
+        public String FirstName { get; set; }
         public String Surname { get; set; }
     }
 }
