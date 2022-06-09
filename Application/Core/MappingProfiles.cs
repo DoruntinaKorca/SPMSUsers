@@ -39,6 +39,9 @@ namespace Application.Core
                 opts => opts.MapFrom(src => src.User.Surname));
 
 
+           
+
+
             CreateMap<AcademicStaff, AcademicStaffDto>()
                 .ForPath(dest=>dest.AcademicLevel,
                 opts=>opts.MapFrom(src=>src.AcademicLevel.Name))
@@ -52,6 +55,25 @@ namespace Application.Core
                 opts => opts.MapFrom(src => src.User.FirstName))
                 .ForPath(dest => dest.Surname,
                 opts => opts.MapFrom(src => src.User.Surname));
+
+
+
+
+
+            CreateMap<RegisterStudentDto, User>()
+                .ForMember(dest => dest.Id,
+               opts => opts.MapFrom(src => src.StudentId))
+                .ForMember(dest => dest.PasswordHash,
+               opts => opts.MapFrom(src => src.Password));
+            // .ForMember(dest => dest.UsersFaculties,
+            //   opts => opts.MapFrom(src => src.FacultyId));
+
+            /*
+           .ForPath(dest => dest.UsersFaculties,
+           opts => opts.MapFrom(src => src.FacultyId)); */
+
+            CreateMap<RegisterStudentDto, Student>().ForMember(dest => dest.StudentId,
+               opts => opts.MapFrom(src => src.StudentId));
 
         }
     }

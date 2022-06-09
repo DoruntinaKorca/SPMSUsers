@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(UsersContext))]
-    partial class UsersContextModelSnapshot : ModelSnapshot
+    [Migration("20220609141642_FX")]
+    partial class FX
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -395,14 +397,12 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AcademicLevel", "AcademicLevel")
                         .WithMany("AcademicStaff")
                         .HasForeignKey("AcademicLevelId")
-                        .HasConstraintName("staffLevel_Academic")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User", "User")
                         .WithOne("AcademicStaff")
                         .HasForeignKey("Domain.AcademicStaff", "AcademicStaffId")
-                        .HasConstraintName("userAcademicStaff")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -416,7 +416,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.User", "User")
                         .WithOne("AdministrativeStaff")
                         .HasForeignKey("Domain.AdministrativeStaff", "AdministrativeStaffId")
-                        .HasConstraintName("userAdministrativeStaff")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -428,14 +427,12 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.CityCategory", "CityCategory")
                         .WithMany("Cities")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("CityCategory_Cities")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
-                        .HasConstraintName("Country_Cities")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -449,14 +446,12 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.Generation", "Generation")
                         .WithMany("Students")
                         .HasForeignKey("GenerationId")
-                        .HasConstraintName("Student_Generation")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User", "User")
                         .WithOne("Student")
                         .HasForeignKey("Domain.Student", "StudentId")
-                        .HasConstraintName("UserStudentISA")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -470,7 +465,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.City", "City")
                         .WithMany("Users")
                         .HasForeignKey("CityId")
-                        .HasConstraintName("City_users")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -482,7 +476,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.User", "User")
                         .WithMany("UsersFaculties")
                         .HasForeignKey("UserID")
-                        .HasConstraintName("User_UsersFaculites")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

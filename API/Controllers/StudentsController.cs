@@ -23,10 +23,15 @@ namespace API.Controllers
         }
 
         [HttpGet("getStudentsForFaculty/{facultyId}")]
-        public async Task<ActionResult<List<UsersFaculty>>> GetStudentsForFaculty(int facultyId)
+        public async Task<ActionResult<List<StudentDto>>> GetStudentsForFaculty(int facultyId)
         {
             return await Mediator.Send(new GetStudentsForFaculty.Query { FacultyId = facultyId });
         }
 
+        [HttpPost("{facultyId}")]
+        public async Task<IActionResult> RegisterStudent(RegisterStudentDto registerStudentDto, int facultyId)
+        {
+            return Ok(await Mediator.Send(new RegisterStudent.Command { RegisterStudentDto = registerStudentDto, FacultyId = facultyId }));
+        }
     }
 }

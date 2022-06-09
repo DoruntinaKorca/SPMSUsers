@@ -12,7 +12,7 @@ namespace Domain
         public Guid StudentId { get; set; }
         public virtual User User { get; set; }
 
-         public int LectureGroupId { get; set; }
+        public int LectureGroupId { get; set; }
     
 
         public int GenerationId { get; set; }
