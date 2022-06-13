@@ -20,7 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
+    <Folder Include="Commands\AcademicLevel\" />
+    <Folder Include="Commands\AdministrativeStaff\" />
+    <Folder Include="Commands\Cities\" />
+    <Folder Include="Commands\Countries\" />
+    <Folder Include="Commands\Generations\" />
+    <Folder Include="Commands\Users\" />
     <Folder Include="Queries\Countries\" />
     <Folder Include="Queries\Generations\" />
     <Folder Include="Queries\AcademicLevel\" />

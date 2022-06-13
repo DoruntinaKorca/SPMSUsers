@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Queries.Students
+namespace Application.Commands.Students
 {
     public class RegisterStudent
     {
@@ -38,10 +38,10 @@ namespace Application.Queries.Students
 
                 user.Id = Guid.NewGuid();
 
-                user.DateRegistered=DateTime.Now;
-                
+                user.DateRegistered = DateTime.Now;
+
                 var student = _mapper.Map<Student>(request.RegisterStudentDto);
-               
+
 
                 var userFaculty = new UsersFaculty
                 {
@@ -49,19 +49,19 @@ namespace Application.Queries.Students
                     //User = user,
                     UserID = user.Id
                 };
-               
+
 
                 student.StudentId = user.Id;
                 student.GenerationId = 1; // krejt qe regjistrohet tash kane me qene te ketij viti TO DO
-               
-                Console.WriteLine("---------------------->>>>>>>>>>>>> useri "+user.Id);
-                    Console.WriteLine("---------------------->>>>>>>>>>>>>  studenti" + student.StudentId);
-                    Console.WriteLine("---------------------->>>>>>>>>>>>> fkfkfkfk " + userFaculty.UserID);
-          
+
+                Console.WriteLine("---------------------->>>>>>>>>>>>> useri " + user.Id);
+                Console.WriteLine("---------------------->>>>>>>>>>>>>  studenti" + student.StudentId);
+                Console.WriteLine("---------------------->>>>>>>>>>>>> fkfkfkfk " + userFaculty.UserID);
+
 
                 await _context.Users.AddAsync(user);
 
-                    await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 await _context.UsersFaculties.AddAsync(userFaculty);
 
@@ -73,16 +73,17 @@ namespace Application.Queries.Students
 
                     await _context.SaveChangesAsync();
 
-                } catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine("blla blla------------> : " + e.Message);
                     Console.WriteLine("blla blla------------> : " + e.InnerException.Message);
                 }
 
-    
+
 
                 return Unit.Value;
-           
+
 
             }
         }

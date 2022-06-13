@@ -37,9 +37,18 @@ namespace Application.Queries.Users
                     .ThenInclude(u => u.CityCategory)
                     .Include(u => u.City.Country)
                     .FirstOrDefaultAsync(x => x.Id == request.UserId);
-             
+
+
 
                 var result = _mapper.Map<PersonalProfileDto>(user);
+                var role = await _context.UserRoles.Where(ur => ur.UserId == request.UserId).FirstOrDefaultAsync();
+               
+                result.RoleId = role.RoleId;
+
+                var roleName = await _context.Roles.Where(n => n.Id == result.RoleId).FirstOrDefaultAsync();
+
+                result.RoleName = roleName.Name;
+
                 return result;
 
             }

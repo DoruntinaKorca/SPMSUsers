@@ -32,7 +32,11 @@ namespace Persistence
 
         public DbSet<Generation> Generations { get; set; }
 
-    //    public DbSet<Role> Roless { get; set; }
+        public DbSet<StudentsLectureGroup> StudentsLectureGroups { get; set; }
+
+        public DbSet<StudentsSpecialization> StudentsSpecializations { get; set; }
+
+        //    public DbSet<Role> Roless { get; set; }
         //public DbSet<Street> Streets { get; set; }
 
         public DbSet<Student> Students { get; set; }
@@ -162,6 +166,25 @@ namespace Persistence
                 .HasConstraintName("User_UsersFaculites")
                 .HasForeignKey(fk => fk.UserID);
 
+
+
+            //StudentsLectureGroup
+            builder.Entity<StudentsLectureGroup>(x => x.HasKey(s => new { s.StudentId, s.LectureGroupId }));
+
+            builder.Entity<StudentsLectureGroup>()
+                .HasOne(u => u.Student)
+                .WithMany(uf => uf.LectureGroups)
+                .HasConstraintName("Student_LectureGroup")
+                .HasForeignKey(fk => fk.StudentId);
+
+            //StudentsSpecialization
+            builder.Entity<StudentsSpecialization>(x => x.HasKey(s => new { s.StudentId, s.SpecializationId }));
+
+            builder.Entity<StudentsSpecialization>()
+                .HasOne(u => u.Student)
+                .WithMany(uf => uf.Specializations)
+                .HasConstraintName("Student_Specializations")
+                .HasForeignKey(fk => fk.StudentId);
         }
     }
 }

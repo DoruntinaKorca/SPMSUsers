@@ -42,6 +42,12 @@ namespace Application.DTOs
 
         public DateTime DateRegistered { get; set; }
 
-      //  public virtual Street Address { get; set; }
+        //  public virtual Street Address { get; set; }
+
+        public Guid RoleId { get; set; }
+
+        public String RoleName { get; set; }
+
+        //   public String RoleName { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Commands.AdministrativeStaff;
 using Application.Core;
 using Application.Queries.AcademicStaff;
 using Application.Queries.AdministrativeStaff;
@@ -66,6 +67,7 @@ namespace API
             services.AddMediatR(typeof(GetAllStudents.Handler).Assembly);
             services.AddMediatR(typeof(GetAllAdministrativeStaff.Handler).Assembly);
             services.AddMediatR(typeof(GetAllAcademicStaff.Handler).Assembly);
+            services.AddMediatR(typeof(RegisterAdministrativeStaff.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
             services.AddAuthentication();

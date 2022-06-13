@@ -38,6 +38,10 @@ namespace Domain
         [Required]
         public DateTime DateRegistered { get; set; }
 
+   //     public int RoleId { get; set; }
+
+       // public Asp MyProperty { get; set; }
+
         public virtual Student Student { get; set; }
 
         public virtual AcademicStaff AcademicStaff { get; set; }

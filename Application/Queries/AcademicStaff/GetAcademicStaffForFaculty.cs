@@ -1,6 +1,5 @@
 ﻿using Application.DTOs;
 using AutoMapper;
-using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -11,15 +10,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Queries.Students
+namespace Application.Queries.AcademicStaff
 {
-    public class GetStudentsForFaculty
+    public class GetAcademicStaffForFaculty
     {
-        public class Query : IRequest<List<StudentDto>>
+        public class Query : IRequest<List<AcademicStaffDto>>
         {
             public int FacultyId { get; set; }
         }
-        public class Handler : IRequestHandler<Query, List<StudentDto>>
+        public class Handler : IRequestHandler<Query, List<AcademicStaffDto>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,18 +29,18 @@ namespace Application.Queries.Students
                 _mapper = mapper;
             }
 
-            public async Task<List<StudentDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<AcademicStaffDto>> Handle(Query request, CancellationToken cancellationToken)
             {
 
                 Console.WriteLine("blla blla-------------------> " + request.FacultyId);
-                var students = await _context.Students
-                    .Include(s => s.Generation)
+                var staff = await _context.AcademicStaffs
+                    .Include(s => s.AcademicLevel)
                     .Include(s => s.User)
                 .Where(a => a.User.UsersFaculties.Any(x => x.FacultyID == request.FacultyId))
                 .ToListAsync();
 
-                var result = _mapper.Map<List<StudentDto>>(students);
-               
+                var result = _mapper.Map<List<AcademicStaffDto>>(staff);
+
 
                 return result;
             }
