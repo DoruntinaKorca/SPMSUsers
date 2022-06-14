@@ -1,10 +1,4 @@
 using System;
-<<<<<<< HEAD
-=======
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
->>>>>>> 37fa234b60102978a2cc701aeb954c859feb5340
 using Application.Commands.AdministrativeStaff;
 using Application.Core;
 using Application.Queries.AcademicStaff;
@@ -43,13 +37,8 @@ namespace API
 
             services.AddDbContext<UsersContext>(opt =>
             {
-<<<<<<< HEAD
                 //opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-=======
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-                //opt.LogTo(Console.WriteLine);
->>>>>>> 37fa234b60102978a2cc701aeb954c859feb5340
             });
 
             services.AddCors(opt =>
@@ -59,11 +48,7 @@ namespace API
                     policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials().WithOrigins("http://localhost:3000");
                 });
             });
-<<<<<<< HEAD
             services.AddIdentity<User, IdentityRole<Guid>>(opt =>
-=======
-            services.AddIdentity<User,IdentityRole<Guid>>(opt =>
->>>>>>> 37fa234b60102978a2cc701aeb954c859feb5340
             {
                 opt.Password.RequireNonAlphanumeric = false;
 
