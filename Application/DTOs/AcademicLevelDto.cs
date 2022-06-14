@@ -6,16 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class CityDto
+    public class AcademicLevelDto
     {
- 
-        public int CityId { get; set; }
+        public int AcademicLevelId { get; set; }
 
-
-        public String CityName { get; set; }
-
-        public int ZIPCode { get; set; }
-
-
+        public String Name { get; set; }
     }
 }

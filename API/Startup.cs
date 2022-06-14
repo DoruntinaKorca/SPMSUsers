@@ -70,6 +70,10 @@ namespace API
             services.AddMediatR(typeof(RegisterAdministrativeStaff.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
             services.AddAuthentication();
             services.AddSwaggerGen(c =>
             {

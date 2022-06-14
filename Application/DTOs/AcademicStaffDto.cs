@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Application.DTOs
         public String FirstName { get; set; }
         public String Surname { get; set; }
 
-        public int AcademicLevelId { get; set; }
-        public String AcademicLevel { get; set; }
+        public AcademicLevelDto AcademicLevel { get; set; }
+
     }
 }

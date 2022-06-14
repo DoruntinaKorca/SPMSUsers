@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using AutoMapper;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -14,11 +15,11 @@ namespace Application.Queries.Students
 {
     public class GetStudentProfile
     {
-        public class Query : IRequest<StudentDto>
+        public class Query : IRequest<GeneralStudentDto>
         {
             public Guid StudentId { get; set; }
         }
-        public class Handler : IRequestHandler<Query, StudentDto>
+        public class Handler : IRequestHandler<Query, GeneralStudentDto>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -29,15 +30,23 @@ namespace Application.Queries.Students
                 _mapper = mapper;
             }
 
-            public async Task<StudentDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<GeneralStudentDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var student = await _context.Students
-                    .Include(s => s.Generation)
-                    .Include(s=>s.User)
+                    .Include(u=>u.User.UsersFaculties)
+                    .Select(x=> new Student
+                    {
+                        StudentId = x.StudentId,
+                        User = x.User,
+                        Generation = x.Generation,
+                        FileNumber = x.FileNumber,
+                        Specializations = x.Specializations,
+                        LectureGroups = x.LectureGroups,
+                    })
                     .FirstOrDefaultAsync(s=>s.StudentId == request.StudentId);
              
 
-                var result = _mapper.Map<StudentDto>(student);
+                var result = _mapper.Map<GeneralStudentDto>(student);
                 return result;
 
             }

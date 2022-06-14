@@ -18,6 +18,7 @@ namespace Domain
         [Required]
         public String ParentName { get; set; }
 
+
         [Required]
         public String Surname { get; set; }
 
@@ -34,6 +35,8 @@ namespace Domain
 
         [Required]
         public int PersonalNumber { get; set; }
+
+    //    public String PhoneNumber { get; set; }
 
         [Required]
         public DateTime DateRegistered { get; set; }

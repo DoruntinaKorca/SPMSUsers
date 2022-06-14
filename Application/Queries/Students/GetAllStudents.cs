@@ -15,11 +15,11 @@ namespace Application.Queries.Students
 {
     public class GetAllStudents
     {
-        public class Query : IRequest<List<StudentDto>>
+        public class Query : IRequest<List<GeneralStudentDto>>
         {
 
         }
-        public class Handler : IRequestHandler<Query, List<StudentDto>>
+        public class Handler : IRequestHandler<Query, List<GeneralStudentDto>>
         {
             private readonly IMapper _mapper;
             private readonly UsersContext _context;
@@ -29,14 +29,14 @@ namespace Application.Queries.Students
                 _mapper = mapper;
                 _context = context;
             }
-            public async Task<List<StudentDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<GeneralStudentDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var students = await _context.Students
                     .Include(s=>s.Generation)
                     .Include(s => s.User)
                     .ToListAsync();
 
-                var result = _mapper.Map<List<StudentDto>>(students);
+                var result = _mapper.Map<List<GeneralStudentDto>>(students);
 
                 return result;
             }

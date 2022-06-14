@@ -16,13 +16,13 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<ActionResult<List<PersonalProfileDto>>> GetAllUsers()
+        public async Task<ActionResult<List<GeneralUserResponse>>> GetAllUsers()
         {
             return await Mediator.Send(new GetAllUsers.Query());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PersonalProfileDto>> GetUserById(Guid id)
+        public async Task<ActionResult<GeneralUserResponse>> GetUserById(Guid id)
         {
             return await Mediator.Send(new GetUserById.Query { UserId = id });
         }

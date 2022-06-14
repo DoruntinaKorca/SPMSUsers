@@ -12,7 +12,7 @@ namespace API.Controllers
     public class StudentsController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<StudentDto>>> GetAllStudents()
+        public async Task<ActionResult<List<GeneralStudentDto>>> GetAllStudents()
         {
             return await Mediator.Send(new GetAllStudents.Query());
         }
@@ -20,7 +20,7 @@ namespace API.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<StudentDto>> GetStudentProfile(Guid id)
+        public async Task<ActionResult<GeneralStudentDto>> GetStudentProfile(Guid id)
         {
             return await Mediator.Send(new GetStudentProfile.Query {StudentId = id });
         }
@@ -29,7 +29,7 @@ namespace API.Controllers
 
 
         [HttpGet("getStudentsForFaculty/{facultyId}")]
-        public async Task<ActionResult<List<StudentDto>>> GetStudentsForFaculty(int facultyId)
+        public async Task<ActionResult<List<GeneralStudentDto>>> GetStudentsForFaculty(int facultyId)
         {
             return await Mediator.Send(new GetStudentsForFaculty.Query { FacultyId = facultyId });
         }

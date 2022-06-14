@@ -15,11 +15,11 @@ namespace Application.Queries.Students
 {
     public class GetStudentsForFaculty
     {
-        public class Query : IRequest<List<StudentDto>>
+        public class Query : IRequest<List<GeneralStudentDto>>
         {
             public int FacultyId { get; set; }
         }
-        public class Handler : IRequestHandler<Query, List<StudentDto>>
+        public class Handler : IRequestHandler<Query, List<GeneralStudentDto>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,7 +30,7 @@ namespace Application.Queries.Students
                 _mapper = mapper;
             }
 
-            public async Task<List<StudentDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<GeneralStudentDto>> Handle(Query request, CancellationToken cancellationToken)
             {
 
                 Console.WriteLine("blla blla-------------------> " + request.FacultyId);
@@ -40,7 +40,7 @@ namespace Application.Queries.Students
                 .Where(a => a.User.UsersFaculties.Any(x => x.FacultyID == request.FacultyId))
                 .ToListAsync();
 
-                var result = _mapper.Map<List<StudentDto>>(students);
+                var result = _mapper.Map<List<GeneralStudentDto>>(students);
                
 
                 return result;

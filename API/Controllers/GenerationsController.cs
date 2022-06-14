@@ -11,7 +11,7 @@ namespace API.Controllers
     {
 
         [HttpGet("getStudentsForGeneration/{generationId}")]
-        public async Task<ActionResult<List<StudentDto>>> GetStudentsForGeneration(int generationId)
+        public async Task<ActionResult<List<GeneralStudentDto>>> GetStudentsForGeneration(int generationId)
         {
             return await Mediator.Send(new GetStudentsForGeneration.Query { GenerationId = generationId });
         }

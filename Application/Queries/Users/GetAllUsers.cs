@@ -15,11 +15,11 @@ namespace Application.Queries.Users
 {
    public class GetAllUsers
     {
-        public class Query : IRequest<List<PersonalProfileDto>>
+        public class Query : IRequest<List<GeneralUserResponse>>
         {
 
         }
-        public class Handler : IRequestHandler<Query, List<PersonalProfileDto>>
+        public class Handler : IRequestHandler<Query, List<GeneralUserResponse>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,7 +30,7 @@ namespace Application.Queries.Users
                 _mapper = mapper;
             }
 
-            public async Task<List<PersonalProfileDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<GeneralUserResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var users=await _context.Users
                     .Include(u => u.City)
@@ -38,7 +38,7 @@ namespace Application.Queries.Users
                     .Include(u => u.City.Country)
                     .ToListAsync();
 
-                var result =_mapper.Map<List<PersonalProfileDto>>(users);
+                var result =_mapper.Map<List<GeneralUserResponse>>(users);
 
                 return  result;
             }

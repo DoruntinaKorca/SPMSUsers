@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using AutoMapper;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,37 +17,58 @@ namespace Application.Core
             CreateMap<GenerationDto, Generation>();
 
 
+            CreateMap<Generation, GenerationDto>();
+
+
+            CreateMap<City, CityDto>();
+
+
+            CreateMap<IdentityRole<Guid>, RoleDto>()
+                 .ForPath(dest => dest.RoleId,
+                            opts => opts.MapFrom(src =>
+                                src.Id));
+
             CreateMap<Country, CountryDto>();
 
-
+            CreateMap<AcademicLevel, AcademicLevelDto>();
             //map for getting personal profile of a user
-            CreateMap<User, PersonalProfileDto>()
+            CreateMap<User, GeneralUserResponse>()
                 .ForPath(dest => dest.City,
                             opts => opts.MapFrom(src =>
-                                src.City.CityName))
-                .ForPath(dest => dest.CityCategory,
+                                src.City))
+
+                 .ForPath(dest => dest.PhoneNumber,
                             opts => opts.MapFrom(src =>
-                                src.City.CityCategory.CategoryName))
-                .ForPath(dest => dest.Country,
+                                src.PhoneNumber))
+                 .ForPath(dest => dest.Email,
                             opts => opts.MapFrom(src =>
-                                src.City.Country.CountryName));
+                                src.Email)).AfterMap((user, dto, rc) =>
+                                {
+                                    dto.Country = rc.Mapper.Map<CountryDto>(user.City.Country);
+                                });
 
 
             //map for getting student profile info
-            CreateMap<Student, StudentDto>()
+            CreateMap<Student, GeneralStudentDto>()
                 .ForPath(dest => dest.Generation,
-                opts => opts.MapFrom(src => src.Generation.Name))
+                opts => opts.MapFrom(src => src.Generation))
                 .ForPath(dest =>dest.FirstName,
                 opts=>opts.MapFrom(src => src.User.FirstName))
                 .ForPath(dest => dest.Surname,
-                opts => opts.MapFrom(src => src.User.Surname));
+                opts => opts.MapFrom(src => src.User.Surname))
+                .ForPath(dest => dest.Specializations, opts => opts
+                .MapFrom(src => src.Specializations.Select(x => x.SpecializationId).ToList()))
+                .ForPath(dest => dest.LectureGroups, opts => opts
+                .MapFrom(src => src.LectureGroups.Select(x => x.LectureGroupId).ToList()))
+                .ForPath(dest => dest.Faculties, opts => opts
+                .MapFrom(src => src.User.UsersFaculties.Select(x => x.FacultyID).ToList() ));
 
 
            
             //map for getting academicStaff profile info
             CreateMap<AcademicStaff, AcademicStaffDto>()
                 .ForPath(dest=>dest.AcademicLevel,
-                opts=>opts.MapFrom(src=>src.AcademicLevel.Name))
+                opts=>opts.MapFrom(src=>src.AcademicLevel))
                 .ForPath(dest => dest.FirstName,
                 opts => opts.MapFrom(src => src.User.FirstName))
                 .ForPath(dest => dest.Surname,
