@@ -2,33 +2,31 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(UsersContext))]
-    partial class UsersContextModelSnapshot : ModelSnapshot
+    [Migration("20220604160432_FileNumberAttributeAdded")]
+    partial class FileNumberAttributeAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.17")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.17");
 
             modelBuilder.Entity("Domain.AcademicLevel", b =>
                 {
                     b.Property<int>("AcademicLevelId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("AcademicLevelId");
 
@@ -38,10 +36,10 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.AcademicStaff", b =>
                 {
                     b.Property<Guid>("AcademicStaffId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("AcademicLevelId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("AcademicStaffId");
 
@@ -53,7 +51,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.AdministrativeStaff", b =>
                 {
                     b.Property<Guid>("AdministrativeStaffId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("AdministrativeStaffId");
 
@@ -64,21 +62,20 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("CityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CityName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CountryId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ZIPCode")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("CityId");
 
@@ -93,11 +90,10 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("CityCategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CategoryName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("CityCategoryId");
 
@@ -108,11 +104,10 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("CountryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("CountryId");
 
@@ -123,36 +118,57 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("GenerationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("GenerationId");
 
                     b.ToTable("Generations");
                 });
 
+            modelBuilder.Entity("Domain.Street", b =>
+                {
+                    b.Property<int>("StreetId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("StreetName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StreetNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("StreetId");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("StreetName")
+                        .IsUnique();
+
+                    b.ToTable("Streets");
+                });
+
             modelBuilder.Entity("Domain.Student", b =>
                 {
                     b.Property<Guid>("StudentId")
-<<<<<<< HEAD
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("FileNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GenerationId")
-                        .HasColumnType("int");
-=======
                         .HasColumnType("TEXT");
 
                     b.Property<int>("FileNumber")
                         .HasColumnType("INTEGER");
->>>>>>> 37fa234b60102978a2cc701aeb954c859feb5340
 
                     b.Property<int>("GenerationId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LectureGroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SpecializationId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("StudentId");
@@ -162,204 +178,127 @@ namespace Persistence.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Domain.StudentsLectureGroup", b =>
-                {
-                    b.Property<Guid>("StudentId")
-<<<<<<< HEAD
-                        .HasColumnType("uniqueidentifier");
-=======
-                        .HasColumnType("TEXT");
->>>>>>> 37fa234b60102978a2cc701aeb954c859feb5340
-
-                    b.Property<int>("LectureGroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudentId", "LectureGroupId");
-
-                    b.ToTable("StudentsLectureGroups");
-                });
-
-            modelBuilder.Entity("Domain.StudentsSpecialization", b =>
-                {
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("StudentId", "LectureGroupId");
-
-                    b.ToTable("StudentsLectureGroups");
-                });
-
-            modelBuilder.Entity("Domain.StudentsSpecialization", b =>
-                {
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("SpecializationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudentId", "SpecializationId");
-
-                    b.ToTable("StudentsSpecializations");
-                });
-
             modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AddressDetails")
-                        .HasColumnType("nvarchar(max)");
-
-<<<<<<< HEAD
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-=======
-                    b.Property<string>("AddressDetails")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("CityId")
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
->>>>>>> 37fa234b60102978a2cc701aeb954c859feb5340
+
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateRegistered")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ParentName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PersonalNumber")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ProfilePictureURL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Domain.UsersFaculty", b =>
-                {
-                    b.Property<Guid>("UserID")
-<<<<<<< HEAD
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("FacultyID")
-                        .HasColumnType("int");
-=======
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("FacultyID")
-                        .HasColumnType("INTEGER");
->>>>>>> 37fa234b60102978a2cc701aeb954c859feb5340
-
-                    b.HasKey("UserID", "FacultyID");
-
-                    b.ToTable("UsersFaculties");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -368,17 +307,16 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -391,17 +329,16 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -413,16 +350,16 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -434,10 +371,10 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -449,16 +386,16 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -470,14 +407,12 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AcademicLevel", "AcademicLevel")
                         .WithMany("AcademicStaff")
                         .HasForeignKey("AcademicLevelId")
-                        .HasConstraintName("staffLevel_Academic")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User", "User")
                         .WithOne("AcademicStaff")
                         .HasForeignKey("Domain.AcademicStaff", "AcademicStaffId")
-                        .HasConstraintName("userAcademicStaff")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -491,7 +426,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.User", "User")
                         .WithOne("AdministrativeStaff")
                         .HasForeignKey("Domain.AdministrativeStaff", "AdministrativeStaffId")
-                        .HasConstraintName("userAdministrativeStaff")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -503,14 +437,12 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.CityCategory", "CityCategory")
                         .WithMany("Cities")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("CityCategory_Cities")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
-                        .HasConstraintName("Country_Cities")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -519,19 +451,28 @@ namespace Persistence.Migrations
                     b.Navigation("Country");
                 });
 
+            modelBuilder.Entity("Domain.Street", b =>
+                {
+                    b.HasOne("Domain.City", "City")
+                        .WithMany("Streets")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("Domain.Student", b =>
                 {
                     b.HasOne("Domain.Generation", "Generation")
                         .WithMany("Students")
                         .HasForeignKey("GenerationId")
-                        .HasConstraintName("Student_Generation")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User", "User")
                         .WithOne("Student")
                         .HasForeignKey("Domain.Student", "StudentId")
-                        .HasConstraintName("UserStudentISA")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -540,52 +481,14 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.StudentsLectureGroup", b =>
-                {
-                    b.HasOne("Domain.Student", "Student")
-                        .WithMany("LectureGroups")
-                        .HasForeignKey("StudentId")
-                        .HasConstraintName("Student_LectureGroup")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("Domain.StudentsSpecialization", b =>
-                {
-                    b.HasOne("Domain.Student", "Student")
-                        .WithMany("Specializations")
-                        .HasForeignKey("StudentId")
-                        .HasConstraintName("Student_Specializations")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.HasOne("Domain.City", "City")
+                    b.HasOne("Domain.Street", "Address")
                         .WithMany("Users")
-                        .HasForeignKey("CityId")
-                        .HasConstraintName("City_users")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("City");
-                });
-
-            modelBuilder.Entity("Domain.UsersFaculty", b =>
-                {
-                    b.HasOne("Domain.User", "User")
-                        .WithMany("UsersFaculties")
-                        .HasForeignKey("UserID")
-                        .HasConstraintName("User_UsersFaculites")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -646,7 +549,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.City", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("Streets");
                 });
 
             modelBuilder.Entity("Domain.CityCategory", b =>
@@ -664,11 +567,9 @@ namespace Persistence.Migrations
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("Domain.Student", b =>
+            modelBuilder.Entity("Domain.Street", b =>
                 {
-                    b.Navigation("LectureGroups");
-
-                    b.Navigation("Specializations");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -678,8 +579,6 @@ namespace Persistence.Migrations
                     b.Navigation("AdministrativeStaff");
 
                     b.Navigation("Student");
-
-                    b.Navigation("UsersFaculties");
                 });
 #pragma warning restore 612, 618
         }
