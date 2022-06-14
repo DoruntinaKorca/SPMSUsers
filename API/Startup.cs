@@ -2,7 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Commands.AdministrativeStaff;
 using Application.Core;
+using Application.Queries.AcademicStaff;
+using Application.Queries.AdministrativeStaff;
+using Application.Queries.Cities;
+using Application.Queries.Students;
 using Application.Queries.Users;
 using Domain;
 using MediatR;
@@ -39,9 +44,16 @@ namespace API
             services.AddDbContext<UsersContext>(opt =>
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                //opt.LogTo(Console.WriteLine);
             });
 
-
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials().WithOrigins("http://localhost:3000");
+                });
+            });
             services.AddIdentity<User,IdentityRole<Guid>>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
@@ -51,7 +63,17 @@ namespace API
                 .AddRoleManager<RoleManager<IdentityRole<Guid>>>();
 
             services.AddMediatR(typeof(GetAllUsers.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllCities.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllStudents.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllAdministrativeStaff.Handler).Assembly);
+            services.AddMediatR(typeof(GetAllAcademicStaff.Handler).Assembly);
+            services.AddMediatR(typeof(RegisterAdministrativeStaff.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+            services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
             services.AddAuthentication();
             services.AddSwaggerGen(c =>
             {
@@ -72,6 +94,8 @@ namespace API
        //     app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

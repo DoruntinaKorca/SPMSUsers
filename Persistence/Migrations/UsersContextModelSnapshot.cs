@@ -126,44 +126,15 @@ namespace Persistence.Migrations
                     b.ToTable("Generations");
                 });
 
-            modelBuilder.Entity("Domain.Street", b =>
-                {
-                    b.Property<int>("StreetId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("StreetName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StreetNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("StreetId");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("StreetName")
-                        .IsUnique();
-
-                    b.ToTable("Streets");
-                });
-
             modelBuilder.Entity("Domain.Student", b =>
                 {
                     b.Property<Guid>("StudentId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("FileNumber")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("GenerationId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("LectureGroupId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SpecializationId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("StudentId");
@@ -171,6 +142,32 @@ namespace Persistence.Migrations
                     b.HasIndex("GenerationId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("Domain.StudentsLectureGroup", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LectureGroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("StudentId", "LectureGroupId");
+
+                    b.ToTable("StudentsLectureGroups");
+                });
+
+            modelBuilder.Entity("Domain.StudentsSpecialization", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SpecializationId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("StudentId", "SpecializationId");
+
+                    b.ToTable("StudentsSpecializations");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -182,7 +179,10 @@ namespace Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AddressId")
+                    b.Property<string>("AddressDetails")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CityId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -202,6 +202,10 @@ namespace Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -210,10 +214,6 @@ namespace Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedEmail")
@@ -259,7 +259,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("CityId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -269,6 +269,19 @@ namespace Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Domain.UsersFaculty", b =>
+                {
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FacultyID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UserID", "FacultyID");
+
+                    b.ToTable("UsersFaculties");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -402,12 +415,14 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AcademicLevel", "AcademicLevel")
                         .WithMany("AcademicStaff")
                         .HasForeignKey("AcademicLevelId")
+                        .HasConstraintName("staffLevel_Academic")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User", "User")
                         .WithOne("AcademicStaff")
                         .HasForeignKey("Domain.AcademicStaff", "AcademicStaffId")
+                        .HasConstraintName("userAcademicStaff")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -421,6 +436,7 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.User", "User")
                         .WithOne("AdministrativeStaff")
                         .HasForeignKey("Domain.AdministrativeStaff", "AdministrativeStaffId")
+                        .HasConstraintName("userAdministrativeStaff")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -432,12 +448,14 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.CityCategory", "CityCategory")
                         .WithMany("Cities")
                         .HasForeignKey("CategoryId")
+                        .HasConstraintName("CityCategory_Cities")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
+                        .HasConstraintName("Country_Cities")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -446,28 +464,19 @@ namespace Persistence.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Domain.Street", b =>
-                {
-                    b.HasOne("Domain.City", "City")
-                        .WithMany("Streets")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-                });
-
             modelBuilder.Entity("Domain.Student", b =>
                 {
                     b.HasOne("Domain.Generation", "Generation")
                         .WithMany("Students")
                         .HasForeignKey("GenerationId")
+                        .HasConstraintName("Student_Generation")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.User", "User")
                         .WithOne("Student")
                         .HasForeignKey("Domain.Student", "StudentId")
+                        .HasConstraintName("UserStudentISA")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -476,15 +485,52 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.User", b =>
+            modelBuilder.Entity("Domain.StudentsLectureGroup", b =>
                 {
-                    b.HasOne("Domain.Street", "Address")
-                        .WithMany("Users")
-                        .HasForeignKey("AddressId")
+                    b.HasOne("Domain.Student", "Student")
+                        .WithMany("LectureGroups")
+                        .HasForeignKey("StudentId")
+                        .HasConstraintName("Student_LectureGroup")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Domain.StudentsSpecialization", b =>
+                {
+                    b.HasOne("Domain.Student", "Student")
+                        .WithMany("Specializations")
+                        .HasForeignKey("StudentId")
+                        .HasConstraintName("Student_Specializations")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.HasOne("Domain.City", "City")
+                        .WithMany("Users")
+                        .HasForeignKey("CityId")
+                        .HasConstraintName("City_users")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
+            modelBuilder.Entity("Domain.UsersFaculty", b =>
+                {
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("UsersFaculties")
+                        .HasForeignKey("UserID")
+                        .HasConstraintName("User_UsersFaculites")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -545,7 +591,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.City", b =>
                 {
-                    b.Navigation("Streets");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.CityCategory", b =>
@@ -563,9 +609,11 @@ namespace Persistence.Migrations
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("Domain.Street", b =>
+            modelBuilder.Entity("Domain.Student", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("LectureGroups");
+
+                    b.Navigation("Specializations");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -575,6 +623,8 @@ namespace Persistence.Migrations
                     b.Navigation("AdministrativeStaff");
 
                     b.Navigation("Student");
+
+                    b.Navigation("UsersFaculties");
                 });
 #pragma warning restore 612, 618
         }

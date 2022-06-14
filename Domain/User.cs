@@ -11,14 +11,13 @@ namespace Domain
     public class User : IdentityUser<Guid>
     {
 
-
-   
         [Required]
-        public String Name { get; set; }
+        public String FirstName { get; set; }
 
 
         [Required]
         public String ParentName { get; set; }
+
 
         [Required]
         public String Surname { get; set; }
@@ -26,7 +25,9 @@ namespace Domain
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        public int AddressId { get; set; }
+        public String AddressDetails { get; set; }
+
+        public int CityId { get; set; }
 
         public String ProfilePictureURL { get; set; }
         [Required]
@@ -35,8 +36,14 @@ namespace Domain
         [Required]
         public int PersonalNumber { get; set; }
 
+    //    public String PhoneNumber { get; set; }
+
         [Required]
         public DateTime DateRegistered { get; set; }
+
+   //     public int RoleId { get; set; }
+
+       // public Asp MyProperty { get; set; }
 
         public virtual Student Student { get; set; }
 
@@ -44,7 +51,9 @@ namespace Domain
 
         public virtual AdministrativeStaff AdministrativeStaff { get; set; }
 
-        public virtual Street Address { get; set; }
+        public virtual City City { get; set; }
+
+        public ICollection<UsersFaculty> UsersFaculties { get; set; } = new List<UsersFaculty>();
 
 
     }

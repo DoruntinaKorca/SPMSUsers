@@ -12,14 +12,15 @@ namespace Domain
         public Guid StudentId { get; set; }
         public virtual User User { get; set; }
 
-         public int LectureGroupId { get; set; }
-    
-
         public int GenerationId { get; set; }
         public Generation Generation { get; set; }
 
+        public int FileNumber { get; set; }
+        public ICollection<StudentsSpecialization> Specializations { get; set; } = new List<StudentsSpecialization>();
 
-        public int SpecializationId { get; set; }
+        public ICollection<StudentsLectureGroup> LectureGroups { get; set; } = new List<StudentsLectureGroup>();
+
      
+
     }
 }
