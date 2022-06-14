@@ -32,12 +32,18 @@ namespace Persistence
 
         public DbSet<Generation> Generations { get; set; }
 
-    //    public DbSet<Role> Roless { get; set; }
-        public DbSet<Street> Streets { get; set; }
+        public DbSet<StudentsLectureGroup> StudentsLectureGroups { get; set; }
+
+        public DbSet<StudentsSpecialization> StudentsSpecializations { get; set; }
+
+        //    public DbSet<Role> Roless { get; set; }
+        //public DbSet<Street> Streets { get; set; }
 
         public DbSet<Student> Students { get; set; }
 
-   //     public DbSet<UsersRoles> UsersRoles { get; set; }
+        public DbSet<UsersFaculty> UsersFaculties { get; set; }
+
+        //     public DbSet<UsersRoles> UsersRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -49,6 +55,7 @@ namespace Persistence
                 ac.HasOne(al => al.AcademicLevel)
                     .WithMany(a => a.AcademicStaff)
                     .HasForeignKey(fk => fk.AcademicLevelId)
+                    .HasConstraintName("staffLevel_Academic")
                     .OnDelete(DeleteBehavior.Cascade);
 
                 ac.Property(e => e.AcademicStaffId).ValueGeneratedNever();
@@ -56,6 +63,7 @@ namespace Persistence
                 ac.HasOne(d => d.User)
                 .WithOne(p => p.AcademicStaff)
                 .HasForeignKey<AcademicStaff>(d => d.AcademicStaffId)
+                .HasConstraintName("userAcademicStaff")
                  .OnDelete(DeleteBehavior.Cascade);
             });
                 
@@ -66,6 +74,7 @@ namespace Persistence
                 .HasOne(d => d.User)
                 .WithOne(p => p.AdministrativeStaff)
                 .HasForeignKey<AdministrativeStaff>(d => d.AdministrativeStaffId)
+                .HasConstraintName("userAdministrativeStaff")
                  .OnDelete(DeleteBehavior.Cascade);
 
 
@@ -75,23 +84,28 @@ namespace Persistence
                 us.HasOne(g => g.Generation)
                     .WithMany(s => s.Students)
                     .HasForeignKey(fk => fk.GenerationId)
+                    .HasConstraintName("Student_Generation")
                     .OnDelete(DeleteBehavior.Cascade);
 
                 us.HasOne(d => d.User)
                 .WithOne(p => p.Student)
                 .HasForeignKey<Student>(d => d.StudentId)
+                .HasConstraintName("UserStudentISA")
                  .OnDelete(DeleteBehavior.Cascade);
             });
                 
 
             //user 
             builder.Entity<User>()
-               .HasOne(s => s.Address)
+               .HasOne(s => s.City)
                .WithMany(u => u.Users)
-               .HasForeignKey(fk => fk.AddressId)
+               .HasForeignKey(fk => fk.CityId)
+               .HasConstraintName("City_users")
                .OnDelete(DeleteBehavior.Cascade);
 
-    
+            builder.Entity<User>()
+               .HasOne(s => s.Student)
+               .WithOne(u => u.User);
 
 
             //usersRole
@@ -121,11 +135,13 @@ namespace Persistence
             y.HasOne(c => c.CityCategory)
                 .WithMany(cr => cr.Cities)
                 .HasForeignKey(fk => fk.CategoryId)
+                .HasConstraintName("CityCategory_Cities")
                 .OnDelete(DeleteBehavior.Cascade);
 
                 y.HasOne(c => c.Country)
                 .WithMany(cit => cit.Cities)
                 .HasForeignKey(fk => fk.CountryId)
+                .HasConstraintName("Country_Cities")
                 .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -134,14 +150,41 @@ namespace Persistence
 
 
             //street
+            /*
             builder.Entity<Street>()
                 .HasOne(c => c.City)
                 .WithMany(s => s.Streets)
                 .HasForeignKey(fk => fk.CityId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade); */
+
+            //UsersFaculty
+            builder.Entity<UsersFaculty>(x => x.HasKey(u => new { u.UserID,u.FacultyID }));
+
+            builder.Entity<UsersFaculty>()
+                .HasOne(u=>u.User)
+                .WithMany(uf=>uf.UsersFaculties)
+                .HasConstraintName("User_UsersFaculites")
+                .HasForeignKey(fk => fk.UserID);
 
 
-            
+
+            //StudentsLectureGroup
+            builder.Entity<StudentsLectureGroup>(x => x.HasKey(s => new { s.StudentId, s.LectureGroupId }));
+
+            builder.Entity<StudentsLectureGroup>()
+                .HasOne(u => u.Student)
+                .WithMany(uf => uf.LectureGroups)
+                .HasConstraintName("Student_LectureGroup")
+                .HasForeignKey(fk => fk.StudentId);
+
+            //StudentsSpecialization
+            builder.Entity<StudentsSpecialization>(x => x.HasKey(s => new { s.StudentId, s.SpecializationId }));
+
+            builder.Entity<StudentsSpecialization>()
+                .HasOne(u => u.Student)
+                .WithMany(uf => uf.Specializations)
+                .HasConstraintName("Student_Specializations")
+                .HasForeignKey(fk => fk.StudentId);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Domain
 
         public Country Country { get; set; }
 
-        public ICollection<Street> Streets { get; set; } = new List<Street>();
+        public ICollection<User> Users { get; set; } = new List<User>();
 
     }
 }
