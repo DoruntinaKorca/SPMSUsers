@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.Commands.CityCategories
 {
-    public class GenerationDto
-    {   
-        public String Name { get; set; }
+    public class EditCityCategory
+    {
     }
 }

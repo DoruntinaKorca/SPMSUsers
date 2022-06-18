@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.StudentDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -33,7 +33,7 @@ namespace Application.Queries.Students
             public async Task<List<GeneralStudentDto>> Handle(Query request, CancellationToken cancellationToken)
             {
 
-                Console.WriteLine("blla blla-------------------> " + request.FacultyId);
+              //  Console.WriteLine("blla blla-------------------> " + request.FacultyId);
                 var students = await _context.Students
                     .Include(s => s.Generation)
                     .Include(s => s.User)

@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.DTOs.CountryDtos
 {
-    public class RoleDto
+    public class EditCountryDto
     {
-        public Guid RoleId { get; set; }
-
-        public String Name { get; set; }
+        public string CountryName { get; set; }
     }
 }

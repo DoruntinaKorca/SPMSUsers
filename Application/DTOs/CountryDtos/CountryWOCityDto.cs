@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.DTOs.CountryDtos
 {
-    public class CountryDto
+    public class CountryWOCityDto
     {
         public int CountryId { get; set; }
 
-        public String CountryName { get; set; }
+        public string CountryName { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.UserDtos;
 using Application.Queries.Users;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    
+
     public class UsersController : BaseApiController
     {
 

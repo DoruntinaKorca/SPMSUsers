@@ -1,5 +1,5 @@
 ﻿using Application.Commands.AdministrativeStaff;
-using Application.DTOs;
+using Application.DTOs.AdministrativeStaffDtos;
 using Application.Queries.AdministrativeStaff;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,6 +26,14 @@ namespace API.Controllers
         public async Task<IActionResult> RegisterAdministrativeStaff(RegisterAdministrativeStaffDto administrativeStaff, int facultyId)
         {
             return Ok(await Mediator.Send(new RegisterAdministrativeStaff.Command { RegisterAdministrativeStaffDto = administrativeStaff, FacultyId = facultyId }));
+        }
+
+        [HttpPut("{administrativeStaffId}")]
+        public async Task<IActionResult> EditAdministrativeStaff(EditAdministrativeStaffDto administrativeStaff, Guid administrativeStaffId)
+        {
+
+            return Ok(await Mediator.Send(new EditAdministrativeStaff
+                .Command { AdministrativeStaffDto = administrativeStaff, Id = administrativeStaffId }));
         }
 
 

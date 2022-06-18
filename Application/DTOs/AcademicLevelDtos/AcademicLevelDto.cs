@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.DTOs.AcademicLevelDtos
 {
     public class AcademicLevelDto
     {
         public int AcademicLevelId { get; set; }
 
-        public String Name { get; set; }
+        public string Name { get; set; }
     }
 }

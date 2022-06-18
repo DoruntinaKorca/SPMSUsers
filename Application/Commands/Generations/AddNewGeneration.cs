@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.GenerationDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -34,21 +34,11 @@ namespace Application.Commands.Generations
             {
 
                 var generation = _mapper.Map<Generation>(request.GenerationDto);
-             //  "CSE1920"
-                var numbers = generation.Name.Count(c => char.IsDigit(c));
 
-  
-                if(numbers == 4)
-                {
                     await _context.Generations.AddAsync(generation);
 
                     await _context.SaveChangesAsync();
-                }               
-               
-
-              
-
-
+                       
                 return Unit.Value;
 
 

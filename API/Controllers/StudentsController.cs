@@ -1,5 +1,5 @@
 ﻿using Application.Commands.Students;
-using Application.DTOs;
+using Application.DTOs.StudentDtos;
 using Application.Queries.Students;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
@@ -34,12 +34,35 @@ namespace API.Controllers
             return await Mediator.Send(new GetStudentsForFaculty.Query { FacultyId = facultyId });
         }
 
+        [HttpGet("getStudentForFaculty/{facultyId}/{studentId}")]
+        public async Task<ActionResult<GeneralStudentDto>> GetStudentForFaculty(int facultyId, Guid studentId)
+        {
+            return await Mediator.Send(new GetStudentForFaculty.Query { FacultyId = facultyId,StudentId = studentId });
+        }
+
 
 
         [HttpPost("{facultyId}")]
         public async Task<IActionResult> RegisterStudent(RegisterStudentDto registerStudentDto, int facultyId)
         {
             return Ok(await Mediator.Send(new RegisterStudent.Command { RegisterStudentDto = registerStudentDto, FacultyId = facultyId }));
+        }
+
+        [HttpPost("addStudentToSpecialization/{studentId}/{specializationId}")]
+        public async Task<IActionResult> AddStudentToSpecialization(SpecializationDto specialization, Guid studentId, int specializationId)
+        {
+            specialization.StudentId = studentId;
+            specialization.SpecializationId = specializationId;
+            return Ok(await Mediator.Send(new SelectSpecializationForStudent.Command { Specialization = specialization }));
+        }
+
+
+        [HttpPost("addStudentToLectureGroup/{studentId}/{lectureGroupId}")]
+        public async Task<IActionResult> AddStudentToLectureGroup(LectureGroupDto lectureGroup, Guid studentId, int lectureGroupId)
+        {
+            lectureGroup.StudentId = studentId;
+            lectureGroup.LectureGroupId = lectureGroupId;
+            return Ok(await Mediator.Send(new SelectLectureGroupForStudent.Command { LectureGroup = lectureGroup }));
         }
 
 
@@ -54,11 +77,13 @@ namespace API.Controllers
 
 
 
-       // [HttpPut("{Id}")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(EditStudentDto student, Guid id)
+        // [HttpPut("{Id}")]
+
+        [HttpPut("{studentId}")]
+        public async Task<IActionResult> EditStudent(EditStudentDto student, Guid studentId)
         {
-            return Ok(await Mediator.Send(new EditStudent.Command { editStudentDto = student , Id = id}));
+
+            return Ok(await Mediator.Send(new EditStudent.Command { StudentDto = student, Id = studentId }));
         }
     }
 }

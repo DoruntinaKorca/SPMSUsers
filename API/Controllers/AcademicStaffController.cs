@@ -1,5 +1,5 @@
 ﻿using Application.Commands.AcademicStaff;
-using Application.DTOs;
+using Application.DTOs.AcademicStaffDtos;
 using Application.Queries.AcademicStaff;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,7 +24,7 @@ namespace API.Controllers
 
 
         [HttpGet("getAcademicStaffForFaculty/{facultyId}")]
-        public async Task<ActionResult<List<AcademicStaffDto>>> GetStudentsForFaculty(int facultyId)
+        public async Task<ActionResult<List<AcademicStaffDto>>> GetAcademicStaffForFaculty(int facultyId)
         {
             return await Mediator.Send(new GetAcademicStaffForFaculty.Query { FacultyId = facultyId });
         }
@@ -34,6 +34,13 @@ namespace API.Controllers
         public async Task<IActionResult> RegisterAcademicStaff(RegisterAcademicStaffDto academicStaff, int facultyId)
         {
             return Ok(await Mediator.Send(new RegisterAcademicStaff.Command { RegisterAcademicStaffDto = academicStaff, FacultyId = facultyId}));
+        }
+
+        [HttpPut("{academicStaffId}")]
+        public async Task<IActionResult> EditAcademicStaff(EditAcademicStaffDto academicStaff, Guid academicStaffId)
+        {
+
+            return Ok(await Mediator.Send(new EditAcademicStaff.Command { AcademicStaffDto = academicStaff, Id = academicStaffId }));
         }
 
 

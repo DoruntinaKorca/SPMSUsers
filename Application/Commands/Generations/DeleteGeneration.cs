@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 namespace Application.Commands.Generations
 {
     public class DeleteGeneration
-    {public class Command : IRequest
+    {
+        public class Command : IRequest
         {
             public int GenerationId { get; set; }
-    }
+        }
     public class Handler : IRequestHandler<Command>
     {
         private readonly UsersContext _context;

@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.CountryDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -15,11 +15,11 @@ namespace Application.Queries.Countries
 {
     public class GetAllCountries
     {
-        public class Query : IRequest<List<CountryDto>>
+        public class Query : IRequest<List<CountryWOCityDto>>
         {
 
         }
-        public class Handler : IRequestHandler<Query, List<CountryDto>>
+        public class Handler : IRequestHandler<Query, List<CountryWOCityDto>>
         {
             private readonly IMapper _mapper;
             private readonly UsersContext _context;
@@ -29,12 +29,12 @@ namespace Application.Queries.Countries
                 _mapper = mapper;
                 _context = context;
             }
-            public async Task<List<CountryDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<CountryWOCityDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var countries = await _context.Countries
                     //.Include(s => s.Cities)
                     .ToListAsync();
-                var result = _mapper.Map<List<CountryDto>>(countries);
+                var result = _mapper.Map<List<CountryWOCityDto>>(countries);
 
                 return result;
             }

@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs
+namespace Application.DTOs.AdministrativeStaffDtos
 {
     public class AdministrativeStaffDto
     {
         public Guid AdministrativeStaffId { get; set; }
-      //  public virtual User User { get; set; }
+        //  public virtual User User { get; set; }
 
-        public String FirstName { get; set; }
-        public String Surname { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
     }
 }

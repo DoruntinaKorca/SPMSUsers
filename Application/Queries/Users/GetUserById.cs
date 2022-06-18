@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.UserDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -64,7 +64,7 @@ namespace Application.Queries.Users
 
                 var result = _mapper.Map<GeneralUserResponse>(user);
 
-                var userRole= await _context.UserRoles.Where(ur => ur.UserId == request.UserId).FirstOrDefaultAsync();
+               var userRole= await _context.UserRoles.Where(ur => ur.UserId == request.UserId).FirstOrDefaultAsync();
                
               
 

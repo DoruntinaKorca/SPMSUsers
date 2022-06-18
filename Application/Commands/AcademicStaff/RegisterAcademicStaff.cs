@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.AcademicStaffDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -20,7 +20,6 @@ namespace Application.Commands.AcademicStaff
 
             public int FacultyId { get; set; }
 
-         //   public int AcademicLevelId { get; set; }
         }
         public class Handler : IRequestHandler<Command>
         {
@@ -36,7 +35,7 @@ namespace Application.Commands.AcademicStaff
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
 
-            //   request.RegisterAcademicStaffDto.AcademicLevelId = request.AcademicLevelId;
+
 
                 var user = _mapper.Map<User>(request.RegisterAcademicStaffDto);
 
@@ -50,7 +49,6 @@ namespace Application.Commands.AcademicStaff
                 var userFaculty = new UsersFaculty
                 {
                     FacultyID = request.FacultyId,
-                    //User = user,
                     UserID = user.Id
                 };
 

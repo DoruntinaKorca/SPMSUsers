@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.StudentDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

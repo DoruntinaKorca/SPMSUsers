@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.AcademicStaffDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +32,7 @@ namespace Application.Queries.AcademicStaff
             public async Task<List<AcademicStaffDto>> Handle(Query request, CancellationToken cancellationToken)
             {
 
-                Console.WriteLine("blla blla-------------------> " + request.FacultyId);
+               
                 var staff = await _context.AcademicStaffs
                     .Include(s => s.AcademicLevel)
                     .Include(s => s.User)

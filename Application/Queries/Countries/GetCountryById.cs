@@ -1,5 +1,6 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.CountryDtos;
 using AutoMapper;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -32,7 +33,14 @@ namespace Application.Queries.Countries
             public async Task<CountryDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var country = await _context.Countries
-                    .FirstOrDefaultAsync(s => s.CountryId == request.CountryId);
+                    .Where(s => s.CountryId == request.CountryId).Select(
+                    x=> new Country
+                    {
+                        CountryId = x.CountryId,
+                        CountryName = x.CountryName,
+                        Cities = x.Cities,
+                    }
+                    ).FirstOrDefaultAsync();
 
 
                 var result = _mapper.Map<CountryDto>(country);
