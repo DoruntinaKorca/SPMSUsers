@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.DTOs.UserDtos;
+using Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,8 @@ namespace Application.DTOs.StudentDtos
         public int FileNumber { get; set; }
 
         public string Password { get; set; }
+
+       // public Guid Role { get; set; }
 
 
         // public int FacultyId { get; set; }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Core;
+using AutoMapper;
 using MediatR;
 using Persistence;
 using System;
@@ -12,11 +13,11 @@ namespace Application.Commands.Countries
 {
     public class DeleteCountry
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public int CountryId { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -27,15 +28,18 @@ namespace Application.Commands.Countries
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var country = await _context.Countries.FindAsync(request.CountryId);
 
+                if (country == null) return null;
                 _context.Remove(country);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to add delete Country");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

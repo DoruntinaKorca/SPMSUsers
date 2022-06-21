@@ -13,26 +13,28 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AdministrativeStaffDto>>> GetAllAdministrativeStaff()
         {
-            return await Mediator.Send(new GetAllAdministrativeStaff.Query());
+            var administrativeStaff= await Mediator.Send(new GetAllAdministrativeStaff.Query());
+            return HandleResult(administrativeStaff);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<AdministrativeStaffDto>> GetAdministrativeStaffProfile(Guid id)
         {
-            return await Mediator.Send(new GetAdministrativeStaffProfile.Query { AdministrativeStaffId = id });
+            var profile =  await Mediator.Send(new GetAdministrativeStaffProfile.Query { AdministrativeStaffId = id });
+            return HandleResult(profile);
         }
 
         [HttpPost("{facultyId}")]
         public async Task<IActionResult> RegisterAdministrativeStaff(RegisterAdministrativeStaffDto administrativeStaff, int facultyId)
         {
-            return Ok(await Mediator.Send(new RegisterAdministrativeStaff.Command { RegisterAdministrativeStaffDto = administrativeStaff, FacultyId = facultyId }));
+            return HandleResult(await Mediator.Send(new RegisterAdministrativeStaff.Command { RegisterAdministrativeStaffDto = administrativeStaff, FacultyId = facultyId }));
         }
 
         [HttpPut("{administrativeStaffId}")]
         public async Task<IActionResult> EditAdministrativeStaff(EditAdministrativeStaffDto administrativeStaff, Guid administrativeStaffId)
         {
 
-            return Ok(await Mediator.Send(new EditAdministrativeStaff
+            return HandleResult(await Mediator.Send(new EditAdministrativeStaff
                 .Command { AdministrativeStaffDto = administrativeStaff, Id = administrativeStaffId }));
         }
 
@@ -40,7 +42,7 @@ namespace API.Controllers
         [HttpDelete("{adminsitrativeStaffId}")]
         public async Task<IActionResult> DeleteAdministrativeStaff(Guid adminsitrativeStaffId)
         {
-            return Ok(await Mediator.Send(new DeleteAdministrativeStaff.Command { AdministrativeStaffId = adminsitrativeStaffId }));
+            return HandleResult(await Mediator.Send(new DeleteAdministrativeStaff.Command { AdministrativeStaffId = adminsitrativeStaffId }));
 
         }
     }

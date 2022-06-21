@@ -1,4 +1,5 @@
-﻿using Application.DTOs.UserDtos;
+﻿using Application.Core;
+using Application.DTOs.UserDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -15,11 +16,11 @@ namespace Application.Queries.Users
 {
     public class GetAllUsers
     {
-        public class Query : IRequest<List<GeneralUserResponse>>
+        public class Query : IRequest<Result<List<GeneralUserResponse>>>
         {
 
         }
-        public class Handler : IRequestHandler<Query, List<GeneralUserResponse>>
+        public class Handler : IRequestHandler<Query, Result<List<GeneralUserResponse>>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,7 +31,7 @@ namespace Application.Queries.Users
                 _mapper = mapper;
             }
 
-            public async Task<List<GeneralUserResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<GeneralUserResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var users=await _context.Users
                     .Include(u => u.City)
@@ -57,8 +58,8 @@ namespace Application.Queries.Users
 
                 result.Role = _mapper.Map<RoleDto>(role);
                 */
-
-                return  result;
+                
+                return Result<List<GeneralUserResponse>>.Success(result);
             }
         }
     }

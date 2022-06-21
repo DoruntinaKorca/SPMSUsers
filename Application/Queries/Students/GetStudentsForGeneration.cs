@@ -1,4 +1,5 @@
-﻿using Application.DTOs.StudentDtos;
+﻿using Application.Core;
+using Application.DTOs.StudentDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,11 @@ namespace Application.Queries.Students
 {
     public class GetStudentsForGeneration
     {
-        public class Query : IRequest<List<GeneralStudentDto>>
+        public class Query : IRequest<Result<List<GeneralStudentDto>>>
         {
             public int GenerationId { get; set; }
         }
-        public class Handler : IRequestHandler<Query, List<GeneralStudentDto>>
+        public class Handler : IRequestHandler<Query, Result<List<GeneralStudentDto>>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -29,7 +30,7 @@ namespace Application.Queries.Students
                 _mapper = mapper;
             }
 
-            public async Task<List<GeneralStudentDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<GeneralStudentDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
 
                 var students = await _context.Students
@@ -41,7 +42,7 @@ namespace Application.Queries.Students
                 var result = _mapper.Map<List<GeneralStudentDto>>(students);
 
 
-                return result;
+                return Result<List<GeneralStudentDto>>.Success(result);
             }
         }
     }

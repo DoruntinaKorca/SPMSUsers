@@ -12,14 +12,14 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CityDto>>> GetAllCities()
         {
-            return await Mediator.Send(new GetAllCities.Query());
+            return HandleResult(await Mediator.Send(new GetAllCities.Query()));
         }
 
 
         [HttpGet("{cityId}")]
         public async Task<ActionResult<CityDto>> getCityById(int cityId)
         {
-            return await Mediator.Send(new GetCityById.Query { CityId = cityId});
+            return HandleResult(await Mediator.Send(new GetCityById.Query { CityId = cityId}));
         }
 
 
@@ -28,21 +28,21 @@ namespace API.Controllers
         {
             cityDto.CountryId = countryId;
             cityDto.CategoryId = categoryId;
-            return Ok(await Mediator.Send(new AddNewCity.Command { CityDto = cityDto, CountryId = countryId, CityCategoryId = categoryId}));
+            return HandleResult(await Mediator.Send(new AddNewCity.Command { CityDto = cityDto, CountryId = countryId, CityCategoryId = categoryId}));
         }
 
         [HttpPut("{cityId}")]
         public async Task<IActionResult> EditCity(CityDto city, int cityId)
         {
 
-            return Ok(await Mediator.Send(new EditCity.Command { CityDto = city, CityId = cityId }));
+            return HandleResult(await Mediator.Send(new EditCity.Command { CityDto = city, CityId = cityId }));
         }
 
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {
-            return Ok(await Mediator.Send(new DeleteCity.Command { CityId = id }));
+            return HandleResult(await Mediator.Send(new DeleteCity.Command { CityId = id }));
         }
     }
 }

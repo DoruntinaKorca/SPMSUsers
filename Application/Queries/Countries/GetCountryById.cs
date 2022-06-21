@@ -1,4 +1,5 @@
-﻿using Application.DTOs.CountryDtos;
+﻿using Application.Core;
+using Application.DTOs.CountryDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -15,11 +16,12 @@ namespace Application.Queries.Countries
 {
     public class GetCountryById
     {
-        public class Query : IRequest<CountryDto>
+        public class Query : IRequest<Result<CountryDto>>
         {
             public int CountryId { get; set; }
         }
-        public class Handler : IRequestHandler<Query, CountryDto>
+        public class Handler : IRequestHandler<Query, Result<CountryDto>>
+        
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,7 +32,7 @@ namespace Application.Queries.Countries
                 _mapper = mapper;
             }
 
-            public async Task<CountryDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<CountryDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var country = await _context.Countries
                     .Where(s => s.CountryId == request.CountryId).Select(
@@ -41,10 +43,10 @@ namespace Application.Queries.Countries
                         Cities = x.Cities,
                     }
                     ).FirstOrDefaultAsync();
-
+                if (country == null) return null;
 
                 var result = _mapper.Map<CountryDto>(country);
-                return result;
+                return Result<CountryDto>.Success(result);
 
             }
         }

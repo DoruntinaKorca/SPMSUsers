@@ -1,4 +1,5 @@
-﻿using Application.DTOs.CityDtos;
+﻿using Application.Core;
+using Application.DTOs.CityDtos;
 using AutoMapper;
 using MediatR;
 using Persistence;
@@ -13,13 +14,13 @@ namespace Application.Commands.Cities
 {
     public class EditCity
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public CityDto CityDto { get; set; }
 
             public int CityId { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,16 +31,20 @@ namespace Application.Commands.Cities
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 var city = await _context.Cities.FindAsync(request.CityId);
 
+                if (city == null) return null;
+
                 _mapper.Map(request.CityDto, city);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to delete City");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

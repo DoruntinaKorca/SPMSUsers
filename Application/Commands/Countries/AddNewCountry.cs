@@ -1,4 +1,5 @@
-﻿using Application.DTOs.CountryDtos;
+﻿using Application.Core;
+using Application.DTOs.CountryDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -14,11 +15,11 @@ namespace Application.Commands.Countries
 {
     public class AddNewCountry
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public AddCountryDto CountryDto { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -29,15 +30,17 @@ namespace Application.Commands.Countries
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var country = _mapper.Map<Country>(request.CountryDto);
 
                 await _context.Countries.AddAsync(country);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to add new Country");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

@@ -18,13 +18,15 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<GeneralUserResponse>>> GetAllUsers()
         {
-            return await Mediator.Send(new GetAllUsers.Query());
+            var users =  await Mediator.Send(new GetAllUsers.Query());
+            return HandleResult(users);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GeneralUserResponse>> GetUserById(Guid id)
         {
-            return await Mediator.Send(new GetUserById.Query { UserId = id });
+            var user= await Mediator.Send(new GetUserById.Query { UserId = id });
+            return HandleResult(user);
         }
 
 

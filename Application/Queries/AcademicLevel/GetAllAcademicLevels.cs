@@ -1,4 +1,5 @@
-﻿using Application.DTOs.AcademicLevelDtos;
+﻿using Application.Core;
+using Application.DTOs.AcademicLevelDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,11 @@ namespace Application.Queries.AcademicLevel
 {
     public class GetAllAcademicLevels
     {
-        public class Query : IRequest<List<AcademicLevelDto>>
+        public class Query : IRequest<Result<List<AcademicLevelDto>>>
         {
 
         }
-        public class Handler : IRequestHandler<Query, List<AcademicLevelDto>>
+        public class Handler : IRequestHandler<Query, Result<List<AcademicLevelDto>>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -29,13 +30,13 @@ namespace Application.Queries.AcademicLevel
                 _mapper = mapper;
             }
 
-            public async Task<List<AcademicLevelDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<AcademicLevelDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var academicLevels = await _context.AcademicLevels.ToListAsync();
 
                 var result = _mapper.Map<List<AcademicLevelDto>>(academicLevels);
 
-                return result;
+                return Result<List<AcademicLevelDto>>.Success(result);
             }
         }
     }

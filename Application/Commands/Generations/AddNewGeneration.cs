@@ -1,4 +1,5 @@
-﻿using Application.DTOs.GenerationDtos;
+﻿using Application.Core;
+using Application.DTOs.GenerationDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -14,12 +15,12 @@ namespace Application.Commands.Generations
 {
     public class AddNewGeneration
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public GenerationDto GenerationDto { get; set; }
 
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,16 +31,18 @@ namespace Application.Commands.Generations
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 var generation = _mapper.Map<Generation>(request.GenerationDto);
 
                     await _context.Generations.AddAsync(generation);
 
-                    await _context.SaveChangesAsync();
-                       
-                return Unit.Value;
+                var result = await _context.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to add new Generation");
+
+                return Result<Unit>.Success(Unit.Value);
 
 
             }

@@ -15,41 +15,45 @@ namespace API.Controllers
         [HttpGet("getStudentsForGeneration/{generationId}")]
         public async Task<ActionResult<List<GeneralStudentDto>>> GetStudentsForGeneration(int generationId)
         {
-            return await Mediator.Send(new GetStudentsForGeneration.Query { GenerationId = generationId });
+            var students= await Mediator
+                .Send(new GetStudentsForGeneration.Query { GenerationId = generationId });
+            return HandleResult(students);
         }
 
         [HttpGet]
         public async Task<ActionResult<List<GeneralGenerationDto>>> GetAllGenerations()
         {
-            return await Mediator.Send(new GetAllGenerations.Query());
+            var generations = await Mediator.Send(new GetAllGenerations.Query());
+            return HandleResult(generations);
         }
 
 
         [HttpGet("{generationId}")]
         public async Task<ActionResult<GeneralGenerationDto>> GetGenerationById(int generationId)
         {
-            return await Mediator.Send(new GetGenerationById.Query { GenerationId = generationId });
+            var generation = await Mediator.Send(new GetGenerationById.Query { GenerationId = generationId });
+            return HandleResult(generation);
         }
 
         [HttpPut("{generationId}")]
         public async Task<IActionResult> EditGeneration(GenerationDto generation, int generationId)
         {
             
-            return Ok(await Mediator.Send(new EditGeneration.Command { GenerationDto = generation, GenerationId = generationId }));
+            return HandleResult(await Mediator.Send(new EditGeneration.Command { GenerationDto = generation, GenerationId = generationId }));
         }
 
 
         [HttpPost]
         public async Task<IActionResult> AddNewGeneration(GenerationDto generation)
         {
-            return Ok(await Mediator.Send(new AddNewGeneration.Command { GenerationDto = generation }));
+            return HandleResult(await Mediator.Send(new AddNewGeneration.Command { GenerationDto = generation }));
         }
 
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGeneration(int id)
         {
-            return Ok(await Mediator.Send(new DeleteGeneration.Command { GenerationId = id }));
+            return HandleResult(await Mediator.Send(new DeleteGeneration.Command { GenerationId = id }));
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.AdministrativeStaffDtos;
+﻿using Application.Core;
+using Application.DTOs.AdministrativeStaffDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,11 @@ namespace Application.Queries.AdministrativeStaff
 {
     public class GetAdministrativeStaffProfile
     {
-        public class Query : IRequest<AdministrativeStaffDto>
+        public class Query : IRequest<Result<AdministrativeStaffDto>>
         {
             public Guid AdministrativeStaffId { get; set; }
         }
-        public class Handler : IRequestHandler<Query, AdministrativeStaffDto>
+        public class Handler : IRequestHandler<Query, Result<AdministrativeStaffDto>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -29,15 +30,15 @@ namespace Application.Queries.AdministrativeStaff
                 _mapper = mapper;
             }
 
-            public async Task<AdministrativeStaffDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<AdministrativeStaffDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var administrativeStaff = await _context.AdministrativeStaffs
                    .Include(a => a.User)
                     .FirstOrDefaultAsync(s => s.AdministrativeStaffId == request.AdministrativeStaffId);
-
+                if (administrativeStaff == null) return null;
                 var result = _mapper.Map<AdministrativeStaffDto>(administrativeStaff);
 
-                return result;
+                return Result<AdministrativeStaffDto>.Success(result);
 
             }
         }

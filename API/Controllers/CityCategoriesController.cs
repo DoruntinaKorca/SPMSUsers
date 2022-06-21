@@ -11,14 +11,16 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CityCategoryDto>>> GetAllCityCategories()
         {
-            return await Mediator.Send(new GetAllCityCategories.Query());
+            var cityCategories = await Mediator.Send(new GetAllCityCategories.Query());
+            return HandleResult(cityCategories);
         }
 
 
         [HttpGet("{cityCategoryId}")]
         public async Task<ActionResult<CityCategoryDto>> GetCityCategoryById(int cityCategoryId)
         {
-            return await Mediator.Send(new GetCityCategoryById.Query { CityCategoryId = cityCategoryId });
+            var cityCategory =  await Mediator.Send(new GetCityCategoryById.Query { CityCategoryId = cityCategoryId });
+            return HandleResult(cityCategory);
         }
     }
 }

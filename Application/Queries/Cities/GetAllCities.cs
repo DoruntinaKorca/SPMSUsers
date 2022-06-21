@@ -1,5 +1,7 @@
-﻿using Application.DTOs.CityDtos;
+﻿using Application.Core;
+using Application.DTOs.CityDtos;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -14,10 +16,10 @@ namespace Application.Queries.Cities
 {
     public class GetAllCities
     {
-        public class Query : IRequest<List<CityDto>> 
+        public class Query : IRequest<Result<List<CityDto>>>
         { 
         }
-        public class Handler : IRequestHandler<Query, List<CityDto>>
+        public class Handler : IRequestHandler<Query, Result<List<CityDto>>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -28,11 +30,15 @@ namespace Application.Queries.Cities
                 _mapper = mapper;
             }
 
-            public async Task<List<CityDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<CityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var cities = await _context.Cities.ToListAsync();
-               var result = _mapper.Map<List<CityDto>>(cities);
-                return result;
+                var cities = await _context.Cities
+                   // .ProjectTo<CityDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                  var result = _mapper.Map<List<CityDto>>(cities);
+
+
+                return Result<List<CityDto>>.Success(result);
             }
         }
     }

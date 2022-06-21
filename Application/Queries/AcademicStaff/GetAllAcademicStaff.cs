@@ -1,4 +1,5 @@
-﻿using Application.DTOs.AcademicStaffDtos;
+﻿using Application.Core;
+using Application.DTOs.AcademicStaffDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,9 @@ namespace Application.Queries.AcademicStaff
 {
     public class GetAllAcademicStaff
     {
-        public class Query : IRequest<List<AcademicStaffDto>>
+        public class Query : IRequest<Result<List<AcademicStaffDto>>>
         { }
-        public class Handler : IRequestHandler<Query, List<AcademicStaffDto>>
+        public class Handler : IRequestHandler<Query, Result<List<AcademicStaffDto>>>
         {
             private readonly IMapper _mapper;
             private readonly UsersContext _context;
@@ -27,7 +28,7 @@ namespace Application.Queries.AcademicStaff
                 _context = context;
             }
 
-            public async Task<List<AcademicStaffDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<AcademicStaffDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var academicStaff = await _context.AcademicStaffs
                    .Include(a=>a.AcademicLevel)
@@ -36,7 +37,7 @@ namespace Application.Queries.AcademicStaff
 
                 var result = _mapper.Map<List<AcademicStaffDto>>(academicStaff);
 
-                return result;
+                return Result<List<AcademicStaffDto>>.Success(result);
             }
         }
     }

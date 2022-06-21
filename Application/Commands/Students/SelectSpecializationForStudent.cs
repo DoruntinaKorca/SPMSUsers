@@ -1,4 +1,5 @@
-﻿using Application.DTOs.StudentDtos;
+﻿using Application.Core;
+using Application.DTOs.StudentDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -14,13 +15,13 @@ namespace Application.Commands.Students
 {
     public class SelectSpecializationForStudent
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public SpecializationDto Specialization { get; set; }
           //  public int SpecializationId { get; set; }
            // public Guid StudentId { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -31,16 +32,18 @@ namespace Application.Commands.Students
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                // var student = await _context.Students.FindAsync(request.StudentId);
                var specialization = _mapper.Map<StudentsSpecialization>(request.Specialization);
 
                 await _context.StudentsSpecializations.AddAsync(specialization);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to select Specialization");
+
+                return Result<Unit>.Success(Unit.Value);
             }
 
         }

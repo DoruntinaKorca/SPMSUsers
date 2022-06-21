@@ -1,4 +1,5 @@
-﻿using Application.DTOs.UserDtos;
+﻿using Application.Core;
+using Application.DTOs.UserDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -15,11 +16,11 @@ namespace Application.Queries.Users
 {
     public class GetUserById
     {
-        public class Query : IRequest<GeneralUserResponse>
+        public class Query : IRequest<Result<GeneralUserResponse>>
         { 
             public Guid UserId { get; set; }
         }
-        public class Handler : IRequestHandler<Query, GeneralUserResponse>
+        public class Handler : IRequestHandler<Query, Result<GeneralUserResponse>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,7 +31,7 @@ namespace Application.Queries.Users
                 _mapper = mapper;
             }
 
-            public async Task<GeneralUserResponse> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<GeneralUserResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.Where(x=>x.Id == request.UserId).Select(x => new User
                 {
@@ -65,7 +66,7 @@ namespace Application.Queries.Users
                 var result = _mapper.Map<GeneralUserResponse>(user);
 
                var userRole= await _context.UserRoles.Where(ur => ur.UserId == request.UserId).FirstOrDefaultAsync();
-               
+
               
 
               var role= await _context.Roles.Where(n => n.Id == userRole.RoleId).FirstOrDefaultAsync();
@@ -74,7 +75,7 @@ namespace Application.Queries.Users
 
                 result.Role = _mapper.Map<RoleDto>(role);
 
-                return result;
+                return Result<GeneralUserResponse>.Success(result);
 
             }
         }

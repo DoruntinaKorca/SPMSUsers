@@ -1,4 +1,5 @@
-﻿using Application.DTOs.StudentDtos;
+﻿using Application.Core;
+using Application.DTOs.StudentDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -14,12 +15,12 @@ namespace Application.Commands.Students
 {
     public class SelectLectureGroupForStudent
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public LectureGroupDto LectureGroup { get; set; }
           
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -30,16 +31,18 @@ namespace Application.Commands.Students
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 // var student = await _context.Students.FindAsync(request.StudentId);
                 var lectureGroup = _mapper.Map<StudentsLectureGroup>(request.LectureGroup);
 
                 await _context.StudentsLectureGroups.AddAsync(lectureGroup);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to select Lecture Group");
+
+                return Result<Unit>.Success(Unit.Value);
             }
 
         }

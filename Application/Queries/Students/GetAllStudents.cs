@@ -1,4 +1,5 @@
-﻿using Application.DTOs.StudentDtos;
+﻿using Application.Core;
+using Application.DTOs.StudentDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -15,11 +16,11 @@ namespace Application.Queries.Students
 {
     public class GetAllStudents
     {
-        public class Query : IRequest<List<GeneralStudentDto>>
+        public class Query : IRequest<Result<List<GeneralStudentDto>>>
         {
 
         }
-        public class Handler : IRequestHandler<Query, List<GeneralStudentDto>>
+        public class Handler : IRequestHandler<Query, Result<List<GeneralStudentDto>>>
         {
             private readonly IMapper _mapper;
             private readonly UsersContext _context;
@@ -29,7 +30,7 @@ namespace Application.Queries.Students
                 _mapper = mapper;
                 _context = context;
             }
-            public async Task<List<GeneralStudentDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<GeneralStudentDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var students = await _context.Students
                        .Select(x => new Student
@@ -45,7 +46,7 @@ namespace Application.Queries.Students
 
                 var result = _mapper.Map<List<GeneralStudentDto>>(students);
 
-                return result;
+                return Result<List<GeneralStudentDto>>.Success(result);
             }
         }
     }

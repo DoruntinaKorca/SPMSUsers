@@ -181,9 +181,11 @@ namespace Application.Core
                opts => opts.MapFrom(src => src.Password));
 
 
-            CreateMap<RegisterStudentDto, Student>().ForMember(dest => dest.StudentId,
+            CreateMap<RegisterStudentDto, Student>()
+                .ForMember(dest => dest.StudentId,
                opts => opts.MapFrom(src => src.StudentId));
 
+          
             //maps for editing a student
             CreateMap<EditStudentDto, User>();
 
@@ -219,8 +221,22 @@ namespace Application.Core
                  .ForPath(dest => dest.RoleId,
                             opts => opts.MapFrom(src =>
                                 src.Id));
-            
 
+            CreateMap<IdentityUserRole<Guid>, UserRoleDto>()
+              .ForPath(dest => dest.RoleId,
+                         opts => opts.MapFrom(src =>
+                             src.RoleId))
+              .ForPath(dest => dest.UserId,
+                         opts => opts.MapFrom(src =>
+                             src.UserId));
+
+            CreateMap<UserRoleDto, IdentityUserRole<Guid>>()
+              .ForPath(dest => dest.RoleId,
+                         opts => opts.MapFrom(src =>
+                             src.RoleId))
+              .ForPath(dest => dest.UserId,
+                         opts => opts.MapFrom(src =>
+                             src.UserId));
         }
     }
 }

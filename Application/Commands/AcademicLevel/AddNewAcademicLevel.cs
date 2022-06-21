@@ -1,4 +1,5 @@
-﻿using Application.DTOs;
+﻿using Application.Core;
+using Application.DTOs;
 using AutoMapper;
 using MediatR;
 using Persistence;
@@ -13,11 +14,11 @@ namespace Application.Commands.AcademicLevel
 {
     public class AddNewAcademicLevel
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public Domain.AcademicLevel AcademicLevel { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -28,15 +29,17 @@ namespace Application.Commands.AcademicLevel
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
               //  var country = _mapper.Map<Country>(request.CountryDto);
 
                 await _context.AcademicLevels.AddAsync(request.AcademicLevel);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to add new academicStaff");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

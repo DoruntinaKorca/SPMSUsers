@@ -13,27 +13,29 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<AcademicLevelDto>>> GetAllAcademicLevel()
         {
-            return await Mediator.Send(new GetAllAcademicLevels.Query());
+            var academicLevels = await Mediator.Send(new GetAllAcademicLevels.Query());
+            return HandleResult(academicLevels);
         }
 
         [HttpGet("{academicLevelId}")]
         public async Task<ActionResult<AcademicLevelDto>> GetAcademicLevelById(int academicLevelId)
         {
-            return await Mediator.Send(new GetAcademicLevelById.Query {AcademicLevelId = academicLevelId });
+            var academicLevel= await Mediator.Send(new GetAcademicLevelById.Query {AcademicLevelId = academicLevelId });
+            return HandleResult(academicLevel);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddNewAcademicLevel(AcademicLevel academicLevel)
         {
    
-            return Ok(await Mediator.Send(new AddNewAcademicLevel.Command { AcademicLevel = academicLevel }));
+            return HandleResult(await Mediator.Send(new AddNewAcademicLevel.Command { AcademicLevel = academicLevel }));
         }
 
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAcademicLevel(int id)
         {
-            return Ok(await Mediator.Send(new DeleteAcademicLevel.Command { AcademicLevelId = id }));
+            return HandleResult(await Mediator.Send(new DeleteAcademicLevel.Command { AcademicLevelId = id }));
         }
 
         [HttpPut("{academicLevelId}")]
@@ -41,7 +43,7 @@ namespace API.Controllers
         {
             academicLevel.AcademicLevelId = academicLevelId;
 
-            return Ok(await Mediator.Send(new EditAcademicLevel.Command { AcademicLevel = academicLevel, AcademicLevelId = academicLevelId }));
+            return HandleResult(await Mediator.Send(new EditAcademicLevel.Command { AcademicLevel = academicLevel, AcademicLevelId = academicLevelId }));
         }
     }
 }

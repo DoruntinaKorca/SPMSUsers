@@ -1,4 +1,5 @@
-﻿using Application.DTOs.AcademicStaffDtos;
+﻿using Application.Core;
+using Application.DTOs.AcademicStaffDtos;
 using AutoMapper;
 using MediatR;
 using Persistence;
@@ -13,13 +14,13 @@ namespace Application.Commands.AcademicStaff
 {
     public class EditAcademicStaff
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public EditAcademicStaffDto AcademicStaffDto { get; set; }
 
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly IMapper _mapper;
             private readonly UsersContext _context;
@@ -30,19 +31,23 @@ namespace Application.Commands.AcademicStaff
                 _context = context;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.FindAsync(request.Id);
 
-                var student = await _context.AcademicStaffs.FindAsync(user.Id);
+                var academicStaff = await _context.AcademicStaffs.FindAsync(user.Id);
+
+                if (academicStaff == null) return null;
 
                 _mapper.Map(request.AcademicStaffDto, user);
 
-                _mapper.Map(request.AcademicStaffDto, student);
+                _mapper.Map(request.AcademicStaffDto, academicStaff);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to edit academicStaff");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

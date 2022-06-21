@@ -1,4 +1,5 @@
-﻿using Application.DTOs.CityCategoryDtos;
+﻿using Application.Core;
+using Application.DTOs.CityCategoryDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,10 @@ namespace Application.Queries.CityCategories
 {
     public class GetAllCityCategories
     {
-        public class Query : IRequest<List<CityCategoryDto>>
+        public class Query : IRequest<Result<List<CityCategoryDto>>>
         {
         }
-        public class Handler : IRequestHandler<Query, List<CityCategoryDto>>
+        public class Handler : IRequestHandler<Query, Result<List<CityCategoryDto>>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -28,11 +29,13 @@ namespace Application.Queries.CityCategories
                 _mapper = mapper;
             }
 
-            public async Task<List<CityCategoryDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<CityCategoryDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var cityCategories = await _context.CityCategories.ToListAsync();
+
                 var result = _mapper.Map<List<CityCategoryDto>>(cityCategories);
-                return result;
+
+                return Result <List<CityCategoryDto>>.Success(result);
             }
         }
     }

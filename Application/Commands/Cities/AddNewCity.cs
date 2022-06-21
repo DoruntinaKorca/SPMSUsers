@@ -1,4 +1,5 @@
-﻿using Application.DTOs.CityDtos;
+﻿using Application.Core;
+using Application.DTOs.CityDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -14,7 +15,7 @@ namespace Application.Commands.Cities
 {
     public class AddNewCity
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public AddCityDto CityDto { get; set; }
 
@@ -22,7 +23,7 @@ namespace Application.Commands.Cities
 
             public int CityCategoryId { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -33,7 +34,7 @@ namespace Application.Commands.Cities
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var city = _mapper.Map<City>(request.CityDto);
 
@@ -43,9 +44,11 @@ namespace Application.Commands.Cities
 
                 await _context.Cities.AddAsync(city);
 
-                await _context.SaveChangesAsync();
+                 var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to add new academicStaff");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

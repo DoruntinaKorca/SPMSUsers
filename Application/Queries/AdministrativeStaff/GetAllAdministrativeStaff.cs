@@ -1,4 +1,5 @@
-﻿using Application.DTOs.AdministrativeStaffDtos;
+﻿using Application.Core;
+using Application.DTOs.AdministrativeStaffDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,9 @@ namespace Application.Queries.AdministrativeStaff
 {
     public class GetAllAdministrativeStaff
     {
-        public class Query : IRequest<List<AdministrativeStaffDto>>
+        public class Query : IRequest<Result<List<AdministrativeStaffDto>>>
         { }
-        public class Handler : IRequestHandler<Query, List<AdministrativeStaffDto>>
+        public class Handler : IRequestHandler<Query, Result<List<AdministrativeStaffDto>>>
         {
             private readonly IMapper _mapper;
             private readonly UsersContext _context;
@@ -27,7 +28,7 @@ namespace Application.Queries.AdministrativeStaff
                 _context = context;
             }
 
-            public async Task<List<AdministrativeStaffDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<AdministrativeStaffDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var administrativeStaff = await _context.AdministrativeStaffs
                    .Include(a => a.User)
@@ -35,7 +36,7 @@ namespace Application.Queries.AdministrativeStaff
 
                 var result = _mapper.Map<List<AdministrativeStaffDto>>(administrativeStaff);
 
-                return result;
+                return Result <List<AdministrativeStaffDto>>.Success(result);
             }
         }
     }

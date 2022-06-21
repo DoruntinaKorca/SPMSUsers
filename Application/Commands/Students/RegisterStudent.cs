@@ -1,7 +1,11 @@
-﻿using Application.DTOs.StudentDtos;
+﻿using Application.Core;
+using Application.DTOs.StudentDtos;
+using Application.DTOs.UserDtos;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
@@ -14,13 +18,13 @@ namespace Application.Commands.Students
 {
     public class RegisterStudent
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public RegisterStudentDto RegisterStudentDto { get; set; }
 
             public int FacultyId { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -31,7 +35,7 @@ namespace Application.Commands.Students
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
 
                 var user = _mapper.Map<User>(request.RegisterStudentDto);
@@ -41,6 +45,7 @@ namespace Application.Commands.Students
                 user.DateRegistered = DateTime.Now;
 
                 var student = _mapper.Map<Student>(request.RegisterStudentDto);
+
 
 
                 var userFaculty = new UsersFaculty
@@ -65,24 +70,29 @@ namespace Application.Commands.Students
 
                 await _context.UsersFaculties.AddAsync(userFaculty);
 
-                try
+
+                await _context.Students.AddAsync(student);
+
+                await _context.SaveChangesAsync();
+
+                var role = await _context.Roles.Where(x => x.Name.Equals("Student")).FirstOrDefaultAsync();
+                var userRoleDto = new UserRoleDto
                 {
+                    UserId = user.Id,
+                    RoleId = role.Id,
+                };
 
-                    await _context.Students.AddAsync(student);
+                var userRole = _mapper.Map<IdentityUserRole<Guid>>(userRoleDto);
+
+                await _context.UserRoles.AddAsync(userRole);
+
+                var result = await _context.SaveChangesAsync() > 0;
+
+                if (!result) return Result<Unit>.Failure("Failed to register Student");
+
+                return Result<Unit>.Success(Unit.Value);
 
 
-                    await _context.SaveChangesAsync();
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("blla blla------------> : " + e.Message);
-                    Console.WriteLine("blla blla------------> : " + e.InnerException.Message);
-                }
-
-
-
-                return Unit.Value;
 
 
             }

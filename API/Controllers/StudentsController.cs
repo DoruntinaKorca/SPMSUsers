@@ -14,7 +14,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<GeneralStudentDto>>> GetAllStudents()
         {
-            return await Mediator.Send(new GetAllStudents.Query());
+            var students= await Mediator.Send(new GetAllStudents.Query());
+
+            return HandleResult(students);
         }
 
 
@@ -22,7 +24,9 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<GeneralStudentDto>> GetStudentProfile(Guid id)
         {
-            return await Mediator.Send(new GetStudentProfile.Query {StudentId = id });
+            var profile = await Mediator.Send(new GetStudentProfile.Query {StudentId = id });
+
+            return HandleResult(profile);
         }
 
 
@@ -31,13 +35,15 @@ namespace API.Controllers
         [HttpGet("getStudentsForFaculty/{facultyId}")]
         public async Task<ActionResult<List<GeneralStudentDto>>> GetStudentsForFaculty(int facultyId)
         {
-            return await Mediator.Send(new GetStudentsForFaculty.Query { FacultyId = facultyId });
+            var students = await Mediator.Send(new GetStudentsForFaculty.Query { FacultyId = facultyId });
+            return HandleResult(students);
         }
 
         [HttpGet("getStudentForFaculty/{facultyId}/{studentId}")]
         public async Task<ActionResult<GeneralStudentDto>> GetStudentForFaculty(int facultyId, Guid studentId)
         {
-            return await Mediator.Send(new GetStudentForFaculty.Query { FacultyId = facultyId,StudentId = studentId });
+            var student = await Mediator.Send(new GetStudentForFaculty.Query { FacultyId = facultyId,StudentId = studentId });
+            return HandleResult(student);
         }
 
 
@@ -45,7 +51,7 @@ namespace API.Controllers
         [HttpPost("{facultyId}")]
         public async Task<IActionResult> RegisterStudent(RegisterStudentDto registerStudentDto, int facultyId)
         {
-            return Ok(await Mediator.Send(new RegisterStudent.Command { RegisterStudentDto = registerStudentDto, FacultyId = facultyId }));
+            return HandleResult(await Mediator.Send(new RegisterStudent.Command { RegisterStudentDto = registerStudentDto, FacultyId = facultyId }));
         }
 
         [HttpPost("addStudentToSpecialization/{studentId}/{specializationId}")]
@@ -53,7 +59,7 @@ namespace API.Controllers
         {
             specialization.StudentId = studentId;
             specialization.SpecializationId = specializationId;
-            return Ok(await Mediator.Send(new SelectSpecializationForStudent.Command { Specialization = specialization }));
+            return HandleResult(await Mediator.Send(new SelectSpecializationForStudent.Command { Specialization = specialization }));
         }
 
 
@@ -62,7 +68,7 @@ namespace API.Controllers
         {
             lectureGroup.StudentId = studentId;
             lectureGroup.LectureGroupId = lectureGroupId;
-            return Ok(await Mediator.Send(new SelectLectureGroupForStudent.Command { LectureGroup = lectureGroup }));
+            return HandleResult(await Mediator.Send(new SelectLectureGroupForStudent.Command { LectureGroup = lectureGroup }));
         }
 
 
@@ -71,7 +77,7 @@ namespace API.Controllers
         [HttpDelete("{studentId}")]
         public async Task<IActionResult> DeleteStudent(Guid studentId)
         {
-            return Ok(await Mediator.Send(new DeleteStudent.Command { StudentId = studentId }));
+            return HandleResult(await Mediator.Send(new DeleteStudent.Command { StudentId = studentId }));
 
         }
 
@@ -83,7 +89,7 @@ namespace API.Controllers
         public async Task<IActionResult> EditStudent(EditStudentDto student, Guid studentId)
         {
 
-            return Ok(await Mediator.Send(new EditStudent.Command { StudentDto = student, Id = studentId }));
+            return HandleResult(await Mediator.Send(new EditStudent.Command { StudentDto = student, Id = studentId }));
         }
     }
 }

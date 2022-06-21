@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Core;
+using AutoMapper;
 using MediatR;
 using Persistence;
 using System;
@@ -12,11 +13,11 @@ namespace Application.Commands.AcademicStaff
 {
     public class DeleteAcademicStaff
     {
-        public class Command : IRequest
+        public class Command : IRequest<Result<Unit>>
         {
             public Guid AcademicStaffId { get; set; }
         }
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -27,15 +28,19 @@ namespace Application.Commands.AcademicStaff
                 _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var academicStaff = await _context.Users.FindAsync(request.AcademicStaffId);
 
+                if (academicStaff == null) return null;
+
                 _context.Remove(academicStaff);
 
-                await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync() > 0;
 
-                return Unit.Value;
+                if (!result) return Result<Unit>.Failure("Failed to delete academicStaff");
+
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

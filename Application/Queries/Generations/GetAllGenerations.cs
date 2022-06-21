@@ -1,4 +1,5 @@
-﻿using Application.DTOs.GenerationDtos;
+﻿using Application.Core;
+using Application.DTOs.GenerationDtos;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,10 @@ namespace Application.Queries.Generations
 {
     public class GetAllGenerations
     {
-        public class Query : IRequest<List<GeneralGenerationDto>>
+        public class Query : IRequest<Result<List<GeneralGenerationDto>>>
         {
         }
-        public class Handler : IRequestHandler<Query, List<GeneralGenerationDto>>
+        public class Handler : IRequestHandler<Query, Result<List<GeneralGenerationDto>>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
@@ -28,11 +29,13 @@ namespace Application.Queries.Generations
                 _mapper = mapper;
             }
 
-            public async Task<List<GeneralGenerationDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<GeneralGenerationDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var generations = await _context.Generations.ToListAsync();
+
                 var result = _mapper.Map<List<GeneralGenerationDto>>(generations);
-                return result;
+
+                return Result<List<GeneralGenerationDto>>.Success(result);
             }
         }
     }
