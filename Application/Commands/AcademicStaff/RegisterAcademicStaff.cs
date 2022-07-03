@@ -1,9 +1,11 @@
 ﻿using Application.Core;
 using Application.DTOs.AcademicStaffDtos;
 using Application.DTOs.UserDtos;
+using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -24,16 +26,20 @@ namespace Application.Commands.AcademicStaff
 
             public int FacultyId { get; set; }
 
+            public IFormFile File { get; set; }
+
         }
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
+            private readonly IPhotoAccessor _photoAccessor;
 
-            public Handler(UsersContext context, IMapper mapper)
+            public Handler(UsersContext context, IMapper mapper, IPhotoAccessor photoAccessor)
             {
                 _context = context;
                 _mapper = mapper;
+                _photoAccessor = photoAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
@@ -46,6 +52,10 @@ namespace Application.Commands.AcademicStaff
                 user.Id = Guid.NewGuid();
 
                 user.DateRegistered = DateTime.Now;
+
+                var photoUploadResult = _photoAccessor.AddPhoto(request.File);
+
+                user.ProfilePictureURL = photoUploadResult.PublicId;
 
                 var academicStaff = _mapper.Map<Domain.AcademicStaff>(request.RegisterAcademicStaffDto);
 

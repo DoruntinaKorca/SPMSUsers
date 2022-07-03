@@ -54,7 +54,6 @@ namespace Application.Commands.Students
 
                 var photoUploadResult = _photoAccessor.AddPhoto(request.File);
 
-
                 user.ProfilePictureURL = photoUploadResult.PublicId;
 
 

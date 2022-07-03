@@ -1,6 +1,7 @@
 ﻿using Application.Commands.AcademicStaff;
 using Application.DTOs.AcademicStaffDtos;
 using Application.Queries.AcademicStaff;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -35,9 +36,9 @@ namespace API.Controllers
 
 
         [HttpPost("{facultyId}")]
-        public async Task<IActionResult> RegisterAcademicStaff(RegisterAcademicStaffDto academicStaff, int facultyId)
+        public async Task<IActionResult> RegisterAcademicStaff([FromForm] RegisterAcademicStaffDto academicStaff, [FromForm] int facultyId, [FromForm] IFormFile file)
         {
-            return HandleResult(await Mediator.Send(new RegisterAcademicStaff.Command { RegisterAcademicStaffDto = academicStaff, FacultyId = facultyId}));
+            return HandleResult(await Mediator.Send(new RegisterAcademicStaff.Command { RegisterAcademicStaffDto = academicStaff, FacultyId = facultyId,File=file}));
         }
 
         [HttpPut("{academicStaffId}")]
