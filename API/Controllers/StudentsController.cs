@@ -2,6 +2,7 @@
 using Application.DTOs.StudentDtos;
 using Application.Queries.Students;
 using Domain;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -49,9 +50,9 @@ namespace API.Controllers
 
 
         [HttpPost("{facultyId}")]
-        public async Task<IActionResult> RegisterStudent(RegisterStudentDto registerStudentDto, int facultyId)
+        public async Task<IActionResult> RegisterStudent([FromForm]RegisterStudentDto registerStudentDto, [FromForm]int facultyId, [FromForm]IFormFile file)
         {
-            return HandleResult(await Mediator.Send(new RegisterStudent.Command { RegisterStudentDto = registerStudentDto, FacultyId = facultyId }));
+            return HandleResult(await Mediator.Send(new RegisterStudent.Command { RegisterStudentDto = registerStudentDto, FacultyId = facultyId, File=file}));
         }
 
         [HttpPost("addStudentToSpecialization/{studentId}/{specializationId}")]

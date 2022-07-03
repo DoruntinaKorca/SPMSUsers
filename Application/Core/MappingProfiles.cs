@@ -65,6 +65,8 @@ namespace Application.Core
             /*----------------->CityProfiles<--------------------*/
             CreateMap<City, CityDto>();
 
+               CreateMap<CityDto, City>();
+
             CreateMap<AddCityDto, City>();
 
             CreateMap<CityCategory, CityCategoryDto>();

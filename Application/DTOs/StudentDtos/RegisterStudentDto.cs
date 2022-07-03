@@ -27,7 +27,7 @@ namespace Application.DTOs.StudentDtos
 
         public int CityId { get; set; }
 
-        public string ProfilePictureURL { get; set; }
+       // public string ProfilePictureURL { get; set; }
 
         public string Gender { get; set; }
 

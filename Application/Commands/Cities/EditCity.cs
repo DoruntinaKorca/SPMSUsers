@@ -42,7 +42,7 @@ namespace Application.Commands.Cities
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (!result) return Result<Unit>.Failure("Failed to delete City");
+                if (!result) return Result<Unit>.Failure("Failed to update City");
 
                 return Result<Unit>.Success(Unit.Value);
             }

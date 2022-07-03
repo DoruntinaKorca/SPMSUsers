@@ -1,9 +1,11 @@
 ﻿using Application.Core;
 using Application.DTOs.StudentDtos;
 using Application.DTOs.UserDtos;
+using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -23,20 +25,26 @@ namespace Application.Commands.Students
             public RegisterStudentDto RegisterStudentDto { get; set; }
 
             public int FacultyId { get; set; }
+
+            public IFormFile File { get; set; }
         }
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
+            private readonly IPhotoAccessor _photoAccessor;
 
-            public Handler(UsersContext context, IMapper mapper)
+            public Handler(UsersContext context, IMapper mapper, IPhotoAccessor photoAccessor)
             {
                 _context = context;
                 _mapper = mapper;
+                _photoAccessor = photoAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                
+
 
                 var user = _mapper.Map<User>(request.RegisterStudentDto);
 
@@ -44,14 +52,19 @@ namespace Application.Commands.Students
 
                 user.DateRegistered = DateTime.Now;
 
+                var photoUploadResult = _photoAccessor.AddPhoto(request.File);
+
+
+                user.ProfilePictureURL = photoUploadResult.PublicId;
+
+
                 var student = _mapper.Map<Student>(request.RegisterStudentDto);
 
-
+              
 
                 var userFaculty = new UsersFaculty
                 {
                     FacultyID = request.FacultyId,
-                    //User = user,
                     UserID = user.Id
                 };
 
@@ -59,17 +72,12 @@ namespace Application.Commands.Students
                 student.StudentId = user.Id;
                 student.GenerationId = 1; // krejt qe regjistrohet tash kane me qene te ketij viti TO DO
 
-                Console.WriteLine("---------------------->>>>>>>>>>>>> useri " + user.Id);
-                Console.WriteLine("---------------------->>>>>>>>>>>>>  studenti" + student.StudentId);
-                Console.WriteLine("---------------------->>>>>>>>>>>>> fkfkfkfk " + userFaculty.UserID);
-
-
+      
                 await _context.Users.AddAsync(user);
 
                 await _context.SaveChangesAsync();
 
                 await _context.UsersFaculties.AddAsync(userFaculty);
-
 
                 await _context.Students.AddAsync(student);
 

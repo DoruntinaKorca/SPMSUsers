@@ -1,6 +1,8 @@
 using System;
 using Application.Commands.AdministrativeStaff;
 using Application.Core;
+using Application.Interfaces;
+using Application.Photos;
 using Application.Queries.AcademicStaff;
 using Application.Queries.AdministrativeStaff;
 using Application.Queries.Cities;
@@ -39,6 +41,7 @@ namespace API
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
               //  opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+              opt.LogTo(Console.WriteLine);
             });
 
             services.AddCors(opt =>
@@ -63,6 +66,10 @@ namespace API
             services.AddMediatR(typeof(GetAllAcademicStaff.Handler).Assembly);
             services.AddMediatR(typeof(RegisterAdministrativeStaff.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
+            services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
+
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

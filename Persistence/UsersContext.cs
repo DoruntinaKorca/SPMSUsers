@@ -22,6 +22,7 @@ namespace Persistence
 
         public DbSet<AcademicStaff> AcademicStaffs { get; set; }
 
+        //public DbSet<Photo> Photos { get; set; }
         public DbSet<AdministrativeStaff> AdministrativeStaffs { get; set; }
 
         public DbSet<City> Cities { get; set; }
@@ -67,7 +68,7 @@ namespace Persistence
                  .OnDelete(DeleteBehavior.Cascade);
             });
                 
-
+           
             //administrative staff
 
             builder.Entity<AdministrativeStaff>()
@@ -185,6 +186,8 @@ namespace Persistence
                 .WithMany(uf => uf.Specializations)
                 .HasConstraintName("Student_Specializations")
                 .HasForeignKey(fk => fk.StudentId);
+
+
         }
     }
 }
