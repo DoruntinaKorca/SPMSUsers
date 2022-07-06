@@ -11,7 +11,7 @@ namespace Persistence
     public class Seed
     {
         public static async Task SeedData(UsersContext context, UserManager<User> userManager)
-        {
+        {/*
             if (!userManager.Users.Any() )
             {
                 var users = new List<User>
@@ -118,7 +118,7 @@ namespace Persistence
                 foreach (var user in users)
                 {
                     await userManager.CreateAsync(user, "Pa$$word1");
-                }
+                } */
                 /*
                 var usersfaculties = new List<UsersFaculty>
                 {
@@ -146,4 +146,4 @@ namespace Persistence
 
         }
     }
-}
+

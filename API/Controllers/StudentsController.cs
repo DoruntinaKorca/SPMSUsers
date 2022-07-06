@@ -87,7 +87,7 @@ namespace API.Controllers
         // [HttpPut("{Id}")]
 
         [HttpPut("{studentId}")]
-        public async Task<IActionResult> EditStudent(EditStudentDto student, Guid studentId)
+        public async Task<IActionResult> EditStudent([FromForm]EditStudentDto student, Guid studentId)
         {
 
             return HandleResult(await Mediator.Send(new EditStudent.Command { StudentDto = student, Id = studentId }));
