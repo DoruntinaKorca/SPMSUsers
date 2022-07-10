@@ -151,6 +151,13 @@ namespace Application.Core
                 .ForMember(dest => dest.AcademicLevelId,
               opts => opts.MapFrom(src => src.AcademicLevelId));
 
+            CreateMap<User, AcademicStaffPublishedDto>();
+
+            CreateMap<AcademicStaff, AcademicStaffPublishedDto>()
+                .ForMember(dest => dest.FirstName,
+              opts => opts.MapFrom(src => src.User.FirstName))
+                .ForMember(dest => dest.Surname,
+              opts => opts.MapFrom(src => src.User.Surname));
 
 
 
@@ -239,6 +246,43 @@ namespace Application.Core
               .ForPath(dest => dest.UserId,
                          opts => opts.MapFrom(src =>
                              src.UserId));
+
+
+            CreateMap<AcademicStaff,UserPublishedDto>()
+                 .ForMember(dest => dest.Id,
+              opts => opts.MapFrom(src => src.User.Id))
+                  .ForMember(dest => dest.Email,
+              opts => opts.MapFrom(src => src.User.Email))
+                  .ForMember(dest => dest.Password,
+              opts => opts.MapFrom(src => src.User.PasswordHash));
+
+
+            CreateMap<User,UserPublishedDto>()
+                .ForMember(dest => dest.Id,
+              opts => opts.MapFrom(src => src.Id))
+                  .ForMember(dest => dest.Email,
+              opts => opts.MapFrom(src => src.Email))
+                  .ForMember(dest => dest.Password,
+              opts => opts.MapFrom(src => src.PasswordHash));
+
+
+            CreateMap<Student, UserPublishedDto>()
+               .ForMember(dest => dest.Id,
+            opts => opts.MapFrom(src => src.User.Id))
+                .ForMember(dest => dest.Email,
+            opts => opts.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.Password,
+            opts => opts.MapFrom(src => src.User.PasswordHash));
+
+
+            CreateMap<AdministrativeStaff, UserPublishedDto>()
+               .ForMember(dest => dest.Id,
+            opts => opts.MapFrom(src => src.User.Id))
+                .ForMember(dest => dest.Email,
+            opts => opts.MapFrom(src => src.User.Email))
+                .ForMember(dest => dest.Password,
+            opts => opts.MapFrom(src => src.User.PasswordHash));
+
         }
     }
 }

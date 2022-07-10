@@ -1,4 +1,5 @@
 using System;
+using Application.AsyncDataServices;
 using Application.Commands.AdministrativeStaff;
 using Application.Core;
 using Application.Interfaces;
@@ -70,6 +71,7 @@ namespace API
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
 
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

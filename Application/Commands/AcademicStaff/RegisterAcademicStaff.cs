@@ -1,4 +1,5 @@
-﻿using Application.Core;
+﻿using Application.AsyncDataServices;
+using Application.Core;
 using Application.DTOs.AcademicStaffDtos;
 using Application.DTOs.UserDtos;
 using Application.Interfaces;
@@ -34,12 +35,17 @@ namespace Application.Commands.AcademicStaff
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
             private readonly IPhotoAccessor _photoAccessor;
+            private readonly IMessageBusClient _messageBusClient;
 
-            public Handler(UsersContext context, IMapper mapper, IPhotoAccessor photoAccessor)
+            public Handler(UsersContext context,
+                IMapper mapper, 
+                IPhotoAccessor photoAccessor,
+                IMessageBusClient messageBusClient)
             {
                 _context = context;
                 _mapper = mapper;
                 _photoAccessor = photoAccessor;
+                _messageBusClient = messageBusClient;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
@@ -91,6 +97,26 @@ namespace Application.Commands.AcademicStaff
                 await _context.UserRoles.AddAsync(userRole);
 
                 var result = await _context.SaveChangesAsync() > 0;
+
+
+
+              //  await _context.SaveChangesAsync();
+                try
+                {
+                    var academicStaffPublishedDto = _mapper.Map<AcademicStaffPublishedDto>(academicStaff);
+                    academicStaffPublishedDto.Event = "AcademicStaff_Published";
+                    _messageBusClient.PublishNewAcademicStaff(academicStaffPublishedDto);
+
+                    var userPublishedDto = _mapper.Map<UserPublishedDto>(user);
+                    userPublishedDto.Event = "User_Published";
+                    _messageBusClient.PublishNewUser(userPublishedDto);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine($"---> Could not send asynchronously: {ex.Message}");
+                }
+
+
 
                 if (!result) return Result<Unit>.Failure("Failed to register Academic Staff");
 

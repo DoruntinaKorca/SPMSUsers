@@ -20,14 +20,14 @@ namespace API.Controllers
         [HttpGet("{academicLevelId}")]
         public async Task<ActionResult<AcademicLevelDto>> GetAcademicLevelById(int academicLevelId)
         {
-            var academicLevel= await Mediator.Send(new GetAcademicLevelById.Query {AcademicLevelId = academicLevelId });
+            var academicLevel = await Mediator.Send(new GetAcademicLevelById.Query { AcademicLevelId = academicLevelId });
             return HandleResult(academicLevel);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddNewAcademicLevel(AcademicLevel academicLevel)
         {
-   
+
             return HandleResult(await Mediator.Send(new AddNewAcademicLevel.Command { AcademicLevel = academicLevel }));
         }
 
