@@ -58,6 +58,21 @@ namespace Application.AsyncDataServices
                 Console.WriteLine("--> RabbitMQ connectionis closed, not sending");
             }
         }
+        public void DeletUser(DeleteUserPublishedDto deleteUserPublishedDto)
+        {
+            var message = JsonSerializer.Serialize(deleteUserPublishedDto);
+
+            if (_connection.IsOpen)
+            {
+                Console.WriteLine("--> RabbitMQ Connection Open, sending User message...");
+
+                SendMessage(message);
+            }
+            else
+            {
+                Console.WriteLine("--> RabbitMQ connectionis closed, not sending");
+            }
+        }
         public void PublishNewUser(UserPublishedDto userPublishedDto)
         {
             var message = JsonSerializer.Serialize(userPublishedDto);
@@ -70,7 +85,7 @@ namespace Application.AsyncDataServices
             }
             else
             {
-                Console.WriteLine("--> RabbitMQ connectionis closed, not sending");
+                Console.WriteLine("--> RabbitMQ connection is closed, not sending");
             }
         }
 
@@ -100,6 +115,6 @@ namespace Application.AsyncDataServices
             Console.WriteLine("--> RabbitMQ Connection Shutdown");
         }
 
-        
+       
     }
 }

@@ -2,6 +2,7 @@ using System;
 using Application.AsyncDataServices;
 using Application.Commands.AdministrativeStaff;
 using Application.Core;
+using Application.Data;
 using Application.Interfaces;
 using Application.Photos;
 using Application.Queries.AcademicStaff;
@@ -71,7 +72,10 @@ namespace API
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
 
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
             services.AddSingleton<IMessageBusClient, MessageBusClient>();
+
+            services.AddScoped<IStudentsRepo, StudentsRepo>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

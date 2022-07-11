@@ -13,5 +13,7 @@ namespace Domain
         public Student Student { get; set; }
 
         public int LectureGroupId { get; set; }
+
+       // public LectureGroup LectureGroup { get; set; }
     }
 }

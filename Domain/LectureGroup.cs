@@ -13,5 +13,7 @@ namespace Domain
         public int LectureGroupId { get; set; }
 
         public String GroupName { get; set; }
+
+    //    public ICollection<StudentsLectureGroup> LectureGroups { get; set; } = new List<StudentsLectureGroup>();
     }
 }

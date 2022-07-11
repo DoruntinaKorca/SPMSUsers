@@ -14,5 +14,7 @@ namespace Application.AsyncDataServices
 
 
         void PublishNewUser(UserPublishedDto userPublishedDto);
+
+        void DeletUser(DeleteUserPublishedDto deleteUserPublishedDto);
     }
 }

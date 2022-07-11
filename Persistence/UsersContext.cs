@@ -18,7 +18,7 @@ namespace Persistence
 
        // public DbSet<User> Users { get; set; }
 
-        public DbSet<AcademicLevel> AcademicLevels { get; set; }
+      
 
         public DbSet<AcademicStaff> AcademicStaffs { get; set; }
 
@@ -35,6 +35,8 @@ namespace Persistence
 
         public DbSet<StudentsLectureGroup> StudentsLectureGroups { get; set; }
 
+        public DbSet<LectureGroup> LectureGroups { get; set; }
+
         public DbSet<StudentsSpecialization> StudentsSpecializations { get; set; }
 
         //    public DbSet<Role> Roless { get; set; }
@@ -43,6 +45,8 @@ namespace Persistence
         public DbSet<Student> Students { get; set; }
 
         public DbSet<UsersFaculty> UsersFaculties { get; set; }
+
+       public DbSet<AcademicLevel> AcademicLevels { get; set; }
 
         //     public DbSet<UsersRoles> UsersRoles { get; set; }
 
@@ -56,10 +60,10 @@ namespace Persistence
                 ac.HasOne(al => al.AcademicLevel)
                     .WithMany(a => a.AcademicStaff)
                     .HasForeignKey(fk => fk.AcademicLevelId)
-                    .HasConstraintName("staffLevel_Academic")
+                    .HasConstraintName("sssss")
                     .OnDelete(DeleteBehavior.Cascade);
 
-                ac.Property(e => e.AcademicStaffId).ValueGeneratedNever();
+              //  ac.Property(e => e.AcademicStaffId).ValueGeneratedNever();
 
                 ac.HasOne(d => d.User)
                 .WithOne(p => p.AcademicStaff)
@@ -177,6 +181,9 @@ namespace Persistence
                 .WithMany(uf => uf.LectureGroups)
                 .HasConstraintName("Student_LectureGroup")
                 .HasForeignKey(fk => fk.StudentId);
+
+      
+
 
             //StudentsSpecialization
             builder.Entity<StudentsSpecialization>(x => x.HasKey(s => new { s.StudentId, s.SpecializationId }));

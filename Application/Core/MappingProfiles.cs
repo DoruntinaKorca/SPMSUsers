@@ -160,9 +160,13 @@ namespace Application.Core
               opts => opts.MapFrom(src => src.User.Surname));
 
 
+            CreateMap<User, DeleteUserPublishedDto>()
+               .ForMember(dest => dest.Id,
+             opts => opts.MapFrom(src => src.Id));
 
-
-
+            CreateMap<AcademicStaff, DeleteUserPublishedDto>()
+              .ForMember(dest => dest.Id,
+            opts => opts.MapFrom(src => src.User.Id));
 
 
 
@@ -200,6 +204,11 @@ namespace Application.Core
 
             CreateMap<EditStudentDto, Student>();
 
+            CreateMap<LectureGroupPublishedDto, LectureGroup>()
+                .ForMember(dest => dest.LectureGroupId, opt =>
+                opt.MapFrom(src => src.LectureGroupId))
+                .ForMember(dest => dest.GroupName, opts =>
+                opts.MapFrom(src => src.GroupName));
 
 
 

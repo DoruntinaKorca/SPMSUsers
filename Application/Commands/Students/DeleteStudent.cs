@@ -1,4 +1,6 @@
-﻿using Application.Core;
+﻿using Application.AsyncDataServices;
+using Application.Core;
+using Application.DTOs.UserDtos;
 using AutoMapper;
 using MediatR;
 using Persistence;
@@ -21,11 +23,13 @@ namespace Application.Commands.Students
         {
             private readonly UsersContext _context;
             private readonly IMapper _mapper;
+            private readonly IMessageBusClient _messageBusClient;
 
-            public Handler(UsersContext context, IMapper mapper)
+            public Handler(UsersContext context, IMapper mapper, IMessageBusClient messageBusClient)
             {
                 _context = context;
                 _mapper = mapper;
+                _messageBusClient = messageBusClient;
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
@@ -33,6 +37,19 @@ namespace Application.Commands.Students
                var student = await _context.Users.FindAsync(request.StudentId);
 
                 if (student == null) return null;
+
+                try
+                {
+                    var deletUserPublishedDto = _mapper.Map<DeleteUserPublishedDto>(student);
+                    deletUserPublishedDto.Event = "Deleted_User_Published";
+                    _messageBusClient.DeletUser(deletUserPublishedDto);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"---> Could not send asynchronously: {ex.Message}");
+                }
+
+
                 _context.Remove(student);
 
                 var result = await _context.SaveChangesAsync() > 0;
